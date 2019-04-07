@@ -25,15 +25,14 @@ Serial.println("Antes");
   while(notConnected)
   {
     Serial.println("Aqui");
-    if(gsmAccess.begin("5056")==GSM_READY)
+    if(gsmAccess.begin("5056")==GSM_READY) {
       notConnected = false;
-    else
-    {
+    } else {
       Serial.println("Not connected");
       delay(1000);
     }
   }
-Serial.println("Despues");
+  Serial.println("Despues");
   delay("10000");
 
   Serial.println("GSM initialized");

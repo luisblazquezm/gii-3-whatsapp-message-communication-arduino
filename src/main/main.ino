@@ -2,11 +2,10 @@
 #include <GSM.h>
 
 #define PINNUMBER ""
-#define PHONENUMBER ""
+#define PHONENUMBER "+34651550473"
 
-char var1, var2;
 String msg = "";         // variable to receive data from the serial port
-String phoneNumber = ""; // phoneNumber
+String phoneNumber = "";
 char buf[200];
 
 // initialize the library instance
@@ -41,45 +40,44 @@ void setup() {
   }
   
   Serial.println("Despues");
-  delay("10000");
-
   Serial.println("GSM initialized");
 }
 
 void loop() {
     // Primero lee el numero de telefono 
-    if (Serial.available())  { // if data is available to read
       //var1 = Serial.read();
       //if ( var1 == 's') 
-      phoneNumber = Serial.readString();     // read it and store it in 'val'
-    }
-
-    Serial.println("El numero es: " + phoneNumber);
-    
-    if( phoneNumber.equals("+34651550473") ) {         // if 'redOn' was received
-      phoneNumber.toCharArray(buf, 200);
-      sms.beginSMS(buf);         // send the message
-
-      if (Serial.available())  {      // if data is available to read
+      //phoneNumber = Serial.readString();     // read it and store it in 'val'
+      
+      //phoneNumber = '+' + phoneNumber;
+      
+              // phoneNumber.equals("+34651550473")
+        phoneNumber = "+34651550473";     // read it and store it in 'val'
+        phoneNumber.toCharArray(buf, 200);
+        Serial.println(buf);
+        sms.beginSMS(buf);         // send the message
+        Serial.println("SMS ya ha begineado");
+        delay(7000);
+        Serial.println("DENTRO DE MSG");
         //var2 = Serial.read();
         //if ( var2 == 'm') 
-        msg = Serial.readString();     // read the message
-      }
+        
+        while (Serial.available())  { // if data is available to read
+          
+            Serial.println("Introduzca el mensaje a mandar");
+            msg = Serial.readString();     // read the message
+            Serial.println("El mensaje es: " + msg);
+            
+            Serial.println("Mensaje enviado!");
+            sms.print(msg);
+            sms.endSMS();
+            
+          
+            delay(10000);
+            while (1)
+            {
+            }
+        }
 
-      Serial.println("El mensaje es: " + msg);
-      
-      if ( msg.equals(phoneNumber) ) {
-        Serial.println("Error, el mensaje es igual que el numero de telfoeno");
-        return;
-      } else {
-        Serial.println("Mensaje enviado!");
-        sms.print(msg);
-        sms.endSMS();
-      }
-      
-    } else {
-      Serial.println("Error, el numero introducido es:" + phoneNumber);
-    }
-    
-    delay(10000);
+
 }
