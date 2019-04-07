@@ -50,9 +50,7 @@ void draw() {
    // JUST FOR DEMO (DO NOT EVER DO THAT!)
    if (send && !msg.equals("")) {
       text("Message sent", (width - textWidth("Message sent")) / 2, 230);
-      port.write("s");
       port.write(sender);
-      port.write("m");
       port.write(msg);
       for (TEXTBOX t : textboxes) {
         t.CLEAR();
