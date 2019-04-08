@@ -6,7 +6,9 @@
 
 String msg = "";         // variable to receive data from the serial port
 String phoneNumber = "";
-char buf[200];
+String pN = "";
+char remoteNum1[20];
+char remoteNum2[20];
 
 // initialize the library instance
 GSM gsmAccess;
@@ -41,43 +43,96 @@ void setup() {
   
   Serial.println("Despues");
   Serial.println("GSM initialized");
+  
+  // phoneNumber.equals("+34651550473")
+  Serial.println("Introduzca el numero de telefono:");
+  readSerial(remoteNum1);
+  Serial.println("El numero introducido es " + String(remoteNum1));
+  
 }
 
-void loop() {
-    // Primero lee el numero de telefono 
-      //var1 = Serial.read();
-      //if ( var1 == 's') 
-      //phoneNumber = Serial.readString();     // read it and store it in 'val'
-      
-      //phoneNumber = '+' + phoneNumber;
-      
-              // phoneNumber.equals("+34651550473")
-        phoneNumber = "+34651550473";     // read it and store it in 'val'
-        phoneNumber.toCharArray(buf, 200);
-        Serial.println(buf);
-        sms.beginSMS(buf);         // send the message
-        Serial.println("SMS ya ha begineado");
-        delay(7000);
-        Serial.println("DENTRO DE MSG");
-        //var2 = Serial.read();
-        //if ( var2 == 'm') 
+void loop() {    
+
+  while (1) {
+    if (sms.available()) {
+      recvMessage();
+    } else {
+      sendMessage();
+    }
+  }
+
+  Serial.println("Saliendo...");
+  while (1){}
+
+}
+
+void sendMessage()
+{ 
+        //Serial.println("Retorno es " + String(num));// send the messag
         
-        while (Serial.available())  { // if data is available to read
-          
-            Serial.println("Introduzca el mensaje a mandar");
+        do { // if data is available to read
             msg = Serial.readString();     // read the message
-            Serial.println("El mensaje es: " + msg);
-            
-            Serial.println("Mensaje enviado!");
-            sms.print(msg);
-            sms.endSMS();
-            
-          
-            delay(10000);
-            while (1)
-            {
+            Serial.println("Esperando...");
+            if (sms.available()){
+              Serial.println("Ha recibido algo");
+              recvMessage();
             }
-        }
+        } while (msg.equals(""));
+        Serial.println("Luis: " + msg);
 
+        int num = sms.beginSMS(remoteNum1);
+        num = sms.print(msg);
+        //Serial.println("Devuelve " + String(num) + " bytes");
+        sms.endSMS();
+        //Serial.println("Mensaje enviado!");
+}
 
+void recvMessage()
+{
+  char c;
+  
+      //Serial.println("Message received from:");
+  
+      // Get remote number
+      sms.remoteNumber(remoteNum2, 20);
+      //Serial.println(remoteNum2);
+  
+      // This is just an example of message disposal    
+      // Messages starting with # should be discarded
+      if(sms.peek()=='#')
+      {
+        Serial.println("Discarded SMS");
+        sms.flush();
+      }
+  
+      // Read message bytes and print them
+      Serial.println(String(remoteNum2) + ":");
+      while(c=sms.read())
+        Serial.print(c);
+  
+      //Serial.println("\nEND OF MESSAGE");
+  
+      // delete message from modem memory
+      sms.flush();
+      //Serial.println("MESSAGE DELETED");
+  
+}
+
+int readSerial(char result[]) {
+  int i = 0;
+  Serial.println("Introduzca el numero receptor");
+  while (1) {
+    while (Serial.available() > 0) {
+      char inChar = Serial.read();
+      if (inChar == '\n') {
+        result[i] = '\0';
+        Serial.flush();
+        return 0;
+      }
+      if (inChar != '\r') {
+        result[i] = inChar;
+        i++;
+      }
+    }
+  }
 }

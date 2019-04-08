@@ -26,6 +26,7 @@ Serial.println("Antes");
   {
     Serial.println("Aqui");
     if(gsmAccess.begin("5056")==GSM_READY) {
+      Serial.println("Connected");
       notConnected = false;
     } else {
       Serial.println("Not connected");
