@@ -25,7 +25,7 @@ Serial.println("Antes");
   while(notConnected)
   {
     Serial.println("Aqui");
-    if(gsmAccess.begin("5056")==GSM_READY) {
+    if(gsmAccess.begin("5056", true)==GSM_READY) {
       Serial.println("Connected");
       notConnected = false;
     } else {
@@ -47,6 +47,8 @@ void loop() {
   sms.beginSMS(PHONENUMBER);
   sms.print("Hola");
   sms.endSMS();
+
+  while(1) {}
 
   delay(10000);
 }
