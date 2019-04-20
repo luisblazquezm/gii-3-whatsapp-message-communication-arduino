@@ -125,13 +125,13 @@ void unlockPhone()
   String phrase;
   
   Serial.println("Introduzca el codigo de desbloqueo");
-  print_msg_LCD('k');
+  print_msg_LCD(3);
   
   do {
     key = getKeyT();       // Recogemos la clave pulsada en el teclado
     
     if (flag) {
-      lcd.print(key);
+      //lcd.print(key);
       
       code = code + key;
       Serial.println(code);
@@ -143,7 +143,7 @@ void unlockPhone()
       lcd.print("Clave erronea");
       delay(1000);
       lcd.clear();
-      print_msg_LCD('k');
+      print_msg_LCD(3);
       
       Serial.println("Contraseña erronea");
       code = "";

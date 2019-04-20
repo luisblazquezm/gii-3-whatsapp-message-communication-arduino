@@ -41,14 +41,13 @@ Serial.println("Antes");
 
 void loop() {
   //Establecer el numero 
-  Serial.println(PHONENUMBER);
+  Serial.println("AT");
+
 
   // send the message
-  sms.beginSMS(PHONENUMBER);
-  sms.print("Hola");
-  sms.endSMS();
-
-  while(1) {}
+  //sms.beginSMS(PHONENUMBER);
+  //sms.print("Hola");
+  //sms.endSMS();
 
   delay(10000);
 }

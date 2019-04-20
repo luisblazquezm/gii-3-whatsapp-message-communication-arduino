@@ -35,7 +35,7 @@ void setup() {
   while(notConnected)
   {
     Serial.println("Aqui");
-    if(gsmAccess.begin(pin)==GSM_READY) {
+    if(gsmAccess.begin("5056", true)==GSM_READY) {
       Serial.println("Connected");
       notConnected = false;
     } else {
@@ -57,7 +57,7 @@ void setup() {
   Serial.println("Introduzca el numero de telefono:");
   readSerial(remoteNum1);
   Serial.println("El numero introducido es " + String(remoteNum1));
-  print_msg_LCD('n');
+  print_msg_LCD(4);
 
   // Pins for LEDs
   pinMode(A0, OUTPUT); // LED verde (cuando se envia el mensaje)

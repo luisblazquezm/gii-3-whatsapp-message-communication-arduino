@@ -5,10 +5,14 @@ const byte rows=4;               //number of rows of keypad
 const byte columns=4;            //number of columnss of keypad
 
 /* ============================= PINES DE CONEXION ============================= */
-const int pinBuzzer = 9;
-const byte Output[rows]={4,5,6,8};      //array of pins used as output for rows of keypad
-const byte Input[columns]={9,11,12,13}; //array of pins used as input for columnss of keypad
-const int lcdPin[6]={8,9,4,5,6,7};
+// Reserved pins 2,3,7,10
+const int pinLED_1 = 9;
+const int pinLED_2 = 8;
+const int pinLED_3 = 6;
+const int pinBuzzer = 10;
+const byte Output[rows]={25,27,29,31};      //array of pins used as output for rows of keypad
+const byte Input[columns]={33,35,37,39}; //array of pins used as input for columnss of keypad
+const int lcdPin[6]={51,53,9,11,12,13};
 
 /* ============================= TECLADO DE MEMBRANA ============================= */
 

@@ -11,48 +11,55 @@ void test_LCD() /* DEBUG */
   lcd.print("   DISPLAY");
 }
 
-void print_msg_LCD(char mode)
+void print_msg_LCD(int mode)
 {
-  if ('s' == mode) { // Sender
-    lcd.setCursor(0,12);
+  Serial.println("LCD message");
+  if (1 == mode) { // Sender
+    Serial.println("Sender writes LCD");
+    lcd.setCursor(12,0);
     lcd.print(remoteNum1); // From 12 -> 15
     
-    lcd.setCursor(1,0);
+    lcd.setCursor(0,1);
     lcd.print(msg_send);
     
     delay(1000);
     lcd.clear();
     
-  } else if ('r' == mode) { // Receiver
+  } else if (2 == mode) { // Receiver
+    Serial.println("Receiver writes LCD");
     lcd.setCursor(0,0);
     lcd.print(remoteNum2); 
 
-    lcd.setCursor(1,0);
+    lcd.setCursor(0,1);
     lcd.print(msg_recv);
 
     delay(1000);
     lcd.clear();
     
-  } else if ('k' == mode) { // Keypad
+  } else if (3 == mode) { // Keypad
+    Serial.println("Keypad writes LCD");
     lcd.setCursor(0,0);
     lcd.print("Introducir clave"); 
 
     lcd.setCursor(1,9);
     
-  } else if ('n' == mode) { // Telephone Numbers
-    lcd.setCursor(1,15);
+  } else if (4 == mode) { // Telephone Numbers
+    Serial.println("Telephone Numbers write LCD");
+    lcd.setCursor(15,1);
     lcd.print("<");
-    lcd.setCursor(1,4);
+    lcd.setCursor(4,1);
     lcd.print(remoteNum2); 
     
-  } else if ('i' == mode) { // Introduce message
+  } else if (5 == mode) { // Introduce message
+    Serial.println("Message introducing writes LCD");
     lcd.setCursor(0,0);
     lcd.print("Introduzca el");
 
-    lcd.setCursor(1,0);
+    lcd.setCursor(0,1);
     lcd.print("mensaje a enviar");
     
-  } else if ('m' == mode) {
+  } else if (6 == mode) {
+    Serial.println("Message received writes LCD");
     lcd.setCursor(0,0);
     lcd.print("Mensaje recibido");
 
