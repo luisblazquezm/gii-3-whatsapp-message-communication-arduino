@@ -20,7 +20,9 @@ void setup() {
   /* Unlock the phone using the Keypad */
   unlockPhone();
 
-  Serial.println("Accessing Whatsapp application");
+  Serial.println("  =======================================================================================");
+  Serial.println("                              Accessing Whatsapp application                             ");
+  Serial.println("  =======================================================================================");
   
   // Start GSM shield
   // If your SIM has PIN, pass it as a parameter of begin() in quotes
@@ -36,7 +38,7 @@ void setup() {
     }
   }
   //Serial.clear();<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-  
+  whatsapp_serial_limpiar_pantalla_menus();
   //lcd.setCursor(0,0); /* LCD */
   //lcd.print('>' + remoteNum1); // From 12 -> 15 /* LCD */
   //print_msg_LCD(4);/* LCD */
@@ -61,6 +63,4 @@ void loop() {
   } else {
     sendMessage();
   }
-  
-
 }
