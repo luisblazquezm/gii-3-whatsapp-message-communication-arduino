@@ -1,5 +1,5 @@
 #include <GSM.h>
-#include <LiquidCrystal.h>
+//#include <LiquidCrystal.h>
 
 // Other variables 
 const byte rows=4;               // Number of rows of keypad
@@ -21,7 +21,7 @@ const byte Output[rows]={25,27,29,31};      // Array of pins used as output for 
 const byte Input[columns]={33,35,37,39};    // Array of pins used as input for columnss of keypad
 
 // Pins used for the LCD
-const int lcdPin[6]={51,53,9,11,12,13};
+//const int lcdPin[6]={51,53,9,11,12,13};
 
 /* ============================= TECLADO DE MEMBRANA ============================= */
 
@@ -30,7 +30,7 @@ const unsigned long period=50;  // Little period used to prevent error
 unsigned long kdelay=0;         // Variable used in non-blocking delay 
 char key = 'p';                 // Variable to control the key pressed
 bool flag = false;              // Flag to add a new introduced digit to the complete password
-String mobile_code = "4568"     // Code to unlock the program using the keypad
+String mobile_code = "4568";     // Code to unlock the program using the keypad
 
 /* ============================= SMS ============================= */
 
@@ -51,7 +51,7 @@ int8_t answer;
 /* ============================= PANTALLA LCD ============================= */
 
 // Initialize the library by providing the nuber of pins to it
-LiquidCrystal lcd(lcdPin[0], lcdPin[1], lcdPin[2], lcdPin[3], lcdPin[4], lcdPin[5]);
+//LiquidCrystal lcd(lcdPin[0], lcdPin[1], lcdPin[2], lcdPin[3], lcdPin[4], lcdPin[5]);
 
 /* ============================= BUZZER ============================= */
 

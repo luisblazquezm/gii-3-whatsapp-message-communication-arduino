@@ -17,9 +17,6 @@ void setup() {
     pinMode(Input[s],INPUT_PULLUP);
   }
 
-  // Initialice the LCD screen 
-  //lcd.begin(16,2); /* LCD */
-
   /* Unlock the phone using the Keypad */
   unlockPhone();
 
@@ -29,8 +26,7 @@ void setup() {
   // If your SIM has PIN, pass it as a parameter of begin() in quotes
   while(notConnected)
   {
-    Serial.println("Connecting to GSM. Please, keep waiting ...");
-    
+    Serial.println("Aqui");
     if(gsmAccess.begin("5056", true)==GSM_READY) {
       Serial.println("Connected");
       notConnected = false;
@@ -39,7 +35,6 @@ void setup() {
       delay(1000);
     }
   }
-  
   //Serial.clear();<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   
   //lcd.setCursor(0,0); /* LCD */
