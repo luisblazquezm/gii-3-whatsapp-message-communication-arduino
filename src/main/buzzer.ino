@@ -1,7 +1,7 @@
 void playNote(int noteInt, double noteFreqArr[], int noteDurationArr[], long breath = 20) 
 {
-  noteDurationArr[noteInt] = noteDurationArr[noteInt] - breath;
-  buzz(8, noteFreqArr[noteInt], noteDurationArr[noteInt]);
+  noteDurationArr[0] = noteDurationArr[0] - breath;
+  buzz(pinBuzzer, noteFreqArr[noteInt], noteDurationArr[0]);
   if(breath > 0) { //take a short pause or 'breath' if specified
     delay(breath);
   }
@@ -13,6 +13,7 @@ void play_tone(String mode)
   int i;
 
   if (mode.equals("send")) {
+    Serial.println("Sonido de enviar");
     for (i = 0 ; i < countTonesSend ; i++)
       playNote(i, noteFreqArrSend, noteDurationArrSend);
   } else if (mode.equals("recv")) {

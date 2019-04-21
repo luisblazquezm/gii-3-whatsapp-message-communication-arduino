@@ -1,7 +1,7 @@
 void sendMessage()
 { 
-    Serial.print(sender_phoneNumber); // Get number
-    Serial.print(": ");
+    
+    Serial.println("+34637172416:"); // Get number
     //print_msg_LCD(5);/* LCD */
     
     do { // If data is available to read
@@ -9,7 +9,7 @@ void sendMessage()
         //Serial.println("Esperando...");
         if (sms.available()){
           Serial.println();
-          Serial.println("***1 message received***");
+          //Serial.println("***1 message received***");
           //print_msg_LCD(6);/* LCD */
           recvMessage();
         }
@@ -27,8 +27,9 @@ void sendMessage()
     digitalWrite(pinLED_2, HIGH);
 
     int num = sms.beginSMS(receiver_phoneNumber);
-    num = sms.print(file_data);
+    num = sms.print(msg_send);
     sms.endSMS();
+    play_tone("send");
     //Serial.println("Mensaje enviado!");
     delay(2000);
 
@@ -45,7 +46,7 @@ void recvMessage()
   // Messages starting with # should be discarded
   if(sms.peek()=='#')
   {
-    Serial.println("Discarded SMS");
+    //Serial.println("Discarded SMS");
     sms.flush();
   }
 
@@ -69,14 +70,14 @@ void recvMessage()
   
   // delete message from modem memory
   sms.flush();
-  Serial.println("MESSAGE DELETED");
+  //Serial.println("MESSAGE DELETED");
   
 }
 
 int readSerial(char result[]) 
 {
   int i = 0;
-  Serial.println("Introduzca el numero receptor");
+  //Serial.println("Introduzca el numero receptor");
   
   while (1) {
     while (Serial.available() > 0) {

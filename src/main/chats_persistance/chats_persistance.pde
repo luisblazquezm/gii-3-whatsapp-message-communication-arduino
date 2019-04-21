@@ -18,8 +18,8 @@ void draw() {
     if (mySerial.available() > 0 ) {
          String value = mySerial.readString();
          if ( value != null ) {
-              if (value.equals("finish")) close_chats();
-              output.println( value );
+              if (value.equals("FINISH")) close_chats();
+              if (value.equals("CHAT")) output.println( value );
          }
     }
 }

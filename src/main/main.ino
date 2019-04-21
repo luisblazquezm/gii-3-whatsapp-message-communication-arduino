@@ -8,6 +8,8 @@ void setup() {
     ; // Wait for serial port to connect. Needed for native USB port only
   }
 
+  pinMode(pinBuzzer, OUTPUT);
+
   // Initalice the pins for the KeyPad 
   for(byte i=0;i<rows;i++) {
     pinMode(Output[i],OUTPUT);
@@ -41,19 +43,24 @@ void setup() {
   //lcd.print('>' + remoteNum1); // From 12 -> 15 /* LCD */
   //print_msg_LCD(4);/* LCD */
 
+  Serial.println("Introduzca el numero de telefono:");
+  readSerial(receiver_phoneNumber);
+  Serial.println("El numero introducido es " + String(receiver_phoneNumber));
+
   // Pins for LEDs
   pinMode(A0, OUTPUT); // LED verde (cuando se envia el mensaje)
   pinMode(A1, OUTPUT); // LED verde (cuando aparece nuestro mensaje en la pantalla) . Simboliza que el el recptero lo ha recibido 
   pinMode(A2, OUTPUT); // LED azul (parpadeante). Cuando llega el whatsapp
+
 }
 
 // Main code of the program. Bidirecctional communication
 void loop() {    
 
-  whatsapp_serial_menu();
+  //whatsapp_serial_menu();
   
   /* Here comes the menu GUI */
-
+  
   if (sms.available()) {
     // Get SIM number and print it 
     sms.remoteNumber(receiver_phoneNumber, 20);
