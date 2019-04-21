@@ -142,7 +142,7 @@ void unlockPhone()
       flag = false;
     }
 
-    if (code.length() == 4 && !code.equals("4568")) {
+    if (code.length() == 4 && !code.equals(mobile_code)) {
       //lcd.clear();/* LCD */
       //lcd.print("Clave erronea");/* LCD */
       delay(1000);
