@@ -5,6 +5,10 @@ const unsigned long period=50;  //little period used to prevent error
 unsigned long kdelay=0;        // variable used in non-blocking delay 
 char key = 'p';
 bool flag = false;
+const byte rows=4;               //number of rows of keypad
+const byte columns=4;            //number of columnss of keypad
+const byte Output[rows]={25,27,29,31};      //array of pins used as output for rows of keypad
+const byte Input[columns]={33,35,37,39}; //array of pins used as input for columnss of keypad
 
 
 
@@ -184,7 +188,6 @@ void unlockPhone()
   String phrase;
   
   Serial.println("Introduzca el codigo de desbloqueo");
-  print_msg_LCD(3);
   
   do {
     key = getKeyT();       // Recogemos la clave pulsada en el teclado
@@ -198,21 +201,14 @@ void unlockPhone()
     }
 
     if (code.length() == 4 && !code.equals("4568")) {
-      lcd.clear();
-      lcd.print("Clave erronea");
       delay(1000);
-      lcd.clear();
-      print_msg_LCD(3);
       
       Serial.println("Contraseña erronea");
       code = "";
     }
   } while(!code.equals("4568"));
 
-  lcd.clear();
-  lcd.print("Accediendo...");
   delay(1000);
-  lcd.clear();
   
   Serial.println("BIENVENIDO!!!!!!!");
 }
