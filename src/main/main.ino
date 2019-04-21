@@ -45,21 +45,24 @@ void setup() {
 
   Serial.println("Introduzca el numero de telefono:");
   int i = 0;
-  while (!Serial.available()) {}
-  /*
-  while (Serial.available())
-  {
-    Serial.println("Esta vivo");
-    while (i < 13)
+  while (1) {
+    while (!Serial.available()) {}
+    while (Serial.available()) 
     {
-      char c = Serial.read();  //gets one byte from serial buffer
-      Serial.println(c);
-      receiver_phoneNumber[i] = c; //makes the string readString
-      i++;
+      Serial.println("Alla vamos");
+      delay(300);  //delay to allow buffer to fill VERY IMPORTANT, it worked beacuse of this
+      if (Serial.available() >0)
+      {
+        char c = Serial.read();  //gets one byte from serial buffer
+        receiver_phoneNumber[i] = c; //makes the string readString
+        i++;
+      }
+      if (i == 12) break;
     }
+    if (i == 12) break;
   }
-  */
-  readSerial(receiver_phoneNumber);
+  
+  receiver_phoneNumber[i] = '\0';
   Serial.println("El numero introducido es " + String(receiver_phoneNumber));
 
   // Pins for LEDs

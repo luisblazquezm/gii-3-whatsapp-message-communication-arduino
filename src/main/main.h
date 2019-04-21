@@ -49,7 +49,7 @@ String pN = "";
 String sender_phoneNumber_str = "";
 String receiver_phoneNumber_str = "";
 char sender_phoneNumber[20];          // Variable used to store the number of the SENDER
-char receiver_phoneNumber[20];        // Variable used to store the number of the RECEIVER
+char receiver_phoneNumber[13];        // Variable used to store the number of the RECEIVER
 int8_t answer;
 
 /* ============================= PANTALLA LCD ============================= */

@@ -9,6 +9,8 @@ void sendMessage()
         while(!Serial.available()) {}
         while (Serial.available())
         {
+          Serial.println("Alla vamos");
+          delay(300);  //delay to allow buffer to fill 
           if (Serial.available() >0)
           {
             char c = Serial.read();  //gets one byte from serial buffer
