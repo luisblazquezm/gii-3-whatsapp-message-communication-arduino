@@ -1,3 +1,5 @@
+
+/* Captures the key pressed in the keypad from the pin detected by the code */
 char getKeyT() 
 {
   if(millis()-kdelay>period) {
@@ -73,51 +75,53 @@ char getKeyT()
   }
 }
 
-byte keypad() // function used to detect which button is used 
+/* Function used to detect which button is used. No need using Keypad.h */
+byte keypad() 
 {
- static bool no_press_flag=0;  //static flag used to ensure no button is pressed 
-  for(byte x=0;x<columns;x++) {
-    
-     if (digitalRead(Input[x])==HIGH);   //read evry input if high continue else break;
-     else
-      break;
+    static bool no_press_flag=0;  // Static flag used to ensure no button is pressed 
+    for(byte x=0;x<columns;x++) {
       
-     if(x==(columns-1)) {
-      no_press_flag=1;
-      h=0;
-      v=0;
-     }
-  }
-  
-  if(no_press_flag==1) {
-    
-    for(byte r=0;r<rows;r++) //for loop used to make all output as low
-      digitalWrite(Output[r],LOW);
-      
-    for(h=0;h<columns;h++) {
-      if(digitalRead(Input[h])==HIGH) //if specific input is remain high (no press on it) continue
-        continue;
-      else {
-          for (v=0;v<rows;v++) {
-            digitalWrite(Output[v],HIGH);   //make specified output as HIGH
-            
-            if(digitalRead(Input[h])==HIGH)  //if the input that selected from first sor loop is change to high
-            {
-              no_press_flag=0;                //reset the no press flag;
-              for(byte w=0;w<rows;w++) // make all outputs as low
-              digitalWrite(Output[w],LOW);
-              return v*4+h;  //return number of button 
-            }
-          
-          }
-      }
+       if (digitalRead(Input[x])==HIGH);   // Read evry input if high continue else break;
+       else
+        break;
+        
+       if(x==(columns-1)) {
+        no_press_flag=1;
+        h=0;
+        v=0;
+       }
     }
-  }
-  
- return 50;
+    
+    if(no_press_flag==1) {
+      
+      for(byte r=0;r<rows;r++) // For loop used to make all output as low
+        digitalWrite(Output[r],LOW);
+        
+      for(h=0;h<columns;h++) {
+        if(digitalRead(Input[h])==HIGH) { // If specific input is remain high (no press on it) continue
+          continue;
+        } else {
+            for (v=0;v<rows;v++) {
+              digitalWrite(Output[v],HIGH);   // Make specified output as HIGH
+              
+              //If the input that selected from first sor loop is change to high
+              if(digitalRead(Input[h])==HIGH) {
+                no_press_flag=0;                // Reset the no press flag;
+                for(byte w=0;w<rows;w++)        // Make all outputs as low
+                  digitalWrite(Output[w],LOW);
+                  
+                return v*4+h;  //return number of button 
+              }
+            } // End of loop
+        }
+      } // End of loop
+    } // End of if
+    
+   return 50;
 }
 
 // Probar con 3 intentos<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+/* Function to make look like we are unlocking a phone to access to Whatsapp service */
 void unlockPhone() 
 {
   int iteracion = 0;
@@ -125,13 +129,13 @@ void unlockPhone()
   String phrase;
   
   Serial.println("Introduzca el codigo de desbloqueo");
-  print_msg_LCD(3);
+  //print_msg_LCD(3);/* LCD */
   
   do {
     key = getKeyT();       // Recogemos la clave pulsada en el teclado
     
     if (flag) {
-      //lcd.print(key);
+      //lcd.print(key);/* LCD */
       
       code = code + key;
       Serial.println(code);
@@ -139,21 +143,21 @@ void unlockPhone()
     }
 
     if (code.length() == 4 && !code.equals("4568")) {
-      lcd.clear();
-      lcd.print("Clave erronea");
+      //lcd.clear();/* LCD */
+      //lcd.print("Clave erronea");/* LCD */
       delay(1000);
-      lcd.clear();
-      print_msg_LCD(3);
+      //lcd.clear();/* LCD */
+      //print_msg_LCD(3);/* LCD */
       
       Serial.println("Contraseña erronea");
       code = "";
     }
-  } while(!code.equals("4568"));
+  } while(!code.equals(mobile_code));
 
-  lcd.clear();
-  lcd.print("Accediendo...");
+  //lcd.clear();/* LCD */
+  //lcd.print("Accediendo...");/* LCD */
   delay(1000);
-  lcd.clear();
+  //lcd.clear();/* LCD */
   
   Serial.println("BIENVENIDO!!!!!!!");
 }

@@ -3,7 +3,7 @@
 void setup() {
   // Initialize serial communications and wait for port to open:
   Serial.begin(9600);
-  
+    
   while (!Serial) {
     ; // Wait for serial port to connect. Needed for native USB port only
   }
@@ -18,23 +18,19 @@ void setup() {
   }
 
   // Initialice the LCD screen 
-  lcd.begin(16,2);
+  //lcd.begin(16,2); /* LCD */
 
   /* Unlock the phone using the Keypad */
   unlockPhone();
 
-  Serial.println("SMS Messages Sender");
-
-  // Connection state
-  boolean notConnected = true;
-
-  Serial.println("Antes");
+  Serial.println("Accessing Whatsapp application");
   
   // Start GSM shield
   // If your SIM has PIN, pass it as a parameter of begin() in quotes
   while(notConnected)
   {
-    Serial.println("Aqui");
+    Serial.println("Connecting to GSM. Please, keep waiting ...");
+    
     if(gsmAccess.begin("5056", true)==GSM_READY) {
       Serial.println("Connected");
       notConnected = false;
@@ -44,20 +40,11 @@ void setup() {
     }
   }
   
-  Serial.println("Despues");
-  Serial.println("GSM initialized");
-
-  // Get SIM number and print it 
-  sms.remoteNumber(remoteNum2, 20);
-  lcd.setCursor(0,0);
-  lcd.print('>' + remoteNum1); // From 12 -> 15
-
-  // Get remote number and print it
-  // phoneNumber.equals("+34651550473")
-  Serial.println("Introduzca el numero de telefono:");
-  readSerial(remoteNum1);
-  Serial.println("El numero introducido es " + String(remoteNum1));
-  print_msg_LCD(4);
+  //Serial.clear();<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  
+  //lcd.setCursor(0,0); /* LCD */
+  //lcd.print('>' + remoteNum1); // From 12 -> 15 /* LCD */
+  //print_msg_LCD(4);/* LCD */
 
   // Pins for LEDs
   pinMode(A0, OUTPUT); // LED verde (cuando se envia el mensaje)
@@ -65,14 +52,20 @@ void setup() {
   pinMode(A2, OUTPUT); // LED azul (parpadeante). Cuando llega el whatsapp
 }
 
+// Main code of the program. Bidirecctional communication
 void loop() {    
 
-  while (1) {
-    if (sms.available()) {
-      recvMessage();
-    } else {
-      sendMessage();
-    }
+  whatsapp_serial_menu();
+  
+  /* Here comes the menu GUI */
+
+  if (sms.available()) {
+    // Get SIM number and print it 
+    sms.remoteNumber(receiver_phoneNumber, 20);
+    recvMessage();
+  } else {
+    sendMessage();
   }
+  
 
 }

@@ -1,34 +1,35 @@
 void sendMessage()
 { 
-    Serial.println("Introduzca el mensaje:");
-    print_msg_LCD(5);
+    Serial.print(sender_phoneNumber); // Get number
+    Serial.print(": ");
+    //print_msg_LCD(5);/* LCD */
     
     do { // If data is available to read
         msg_send = Serial.readString();     // Read the message
-        Serial.println("Esperando...");
+        //Serial.println("Esperando...");
         if (sms.available()){
-          Serial.println("Ha recibido algo");
-          print_msg_LCD(6);
+          Serial.println();
+          Serial.println("***1 message received***");
+          //print_msg_LCD(6);/* LCD */
           recvMessage();
         }
     } while (msg_send.equals(""));
     
     // Turns on second green LED
-    lcd.clear();
+    //lcd.clear();/* LCD */
     digitalWrite(pinLED_1, HIGH);
 
     delay(5000);
-    print_msg_LCD(1);
-    Serial.println("Luis: " + msg_send);
+    //print_msg_LCD(1);/* LCD */
+    Serial.println(msg_send);
 
     // Turns on second green LED
     digitalWrite(pinLED_2, HIGH);
 
-    int num = sms.beginSMS(remoteNum1);
-    //sendMMS();
+    int num = sms.beginSMS(receiver_phoneNumber);
     num = sms.print(file_data);
     sms.endSMS();
-    Serial.println("Mensaje enviado!");
+    //Serial.println("Mensaje enviado!");
     delay(2000);
 
     digitalWrite(pinLED_1, LOW);
@@ -49,12 +50,12 @@ void recvMessage()
   }
 
   // Read message bytes and print them
-  Serial.println(String(remoteNum2) + ":");
+  Serial.println(String(receiver_phoneNumber) + ":");
   while(c=sms.read()) {
     msg_recv = msg_recv + c;
     Serial.print(c);
   }
-  print_msg_LCD(2);
+  //print_msg_LCD(2);/* LCD */
 
   // Turns on blue LED
   while (i < 5) {
@@ -76,6 +77,7 @@ int readSerial(char result[])
 {
   int i = 0;
   Serial.println("Introduzca el numero receptor");
+  
   while (1) {
     while (Serial.available() > 0) {
       char inChar = Serial.read();

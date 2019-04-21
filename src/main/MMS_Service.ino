@@ -1,3 +1,4 @@
+/*
 void sendMMS()
 {
   answer = sendATcommand("AT", "OK", 2000); 
@@ -141,3 +142,4 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
 
     return answer;
 }
+*/
