@@ -44,6 +44,21 @@ void setup() {
   //print_msg_LCD(4);/* LCD */
 
   Serial.println("Introduzca el numero de telefono:");
+  int i = 0;
+  while (!Serial.available()) {}
+  /*
+  while (Serial.available())
+  {
+    Serial.println("Esta vivo");
+    while (i < 13)
+    {
+      char c = Serial.read();  //gets one byte from serial buffer
+      Serial.println(c);
+      receiver_phoneNumber[i] = c; //makes the string readString
+      i++;
+    }
+  }
+  */
   readSerial(receiver_phoneNumber);
   Serial.println("El numero introducido es " + String(receiver_phoneNumber));
 

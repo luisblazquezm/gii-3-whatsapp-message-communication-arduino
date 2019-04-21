@@ -5,13 +5,19 @@
 //  165.4064, 130.813, 261.626, 523.251, 1046.50, 2093.00, 4186.01
 //};
 
-double noteFreqArrSend[] = {  /* Mario victory */
-  130, 262, 330, 392, 523, 660, 784, 660, 146, 262, 311, 415, 523, 622, 831, 622, 155, 294, 349, 466, 588, 699, 933, 933, 933, 933, 1047
+//double noteFreqArrSend[] = {  /* Mario victory */
+//   466, 588, 699, 933, 933, 933, 933, 1047
+//};
+
+
+//double noteFreqArrSend[] = {  /* Jingle bells */
+//   659, 659, 659
+//};
+
+double noteFreqArrSend[] = {  /* Jingle bells */
+   392, 262, 311, 349, 392, 262/*, 311, 349, 392, 262, 311, 349, 392, 262, 311 */
 };
 
-//double noteFreqArrSend[] = {  /* MIsion imposible */
-//  392, 
-//};
 
 double noteFreqArrRecv[] = {  /* Mario victory */
 49.4, 52.3, 55.4, 58.7, 62.2, 65.9, 69.9, 74, 78.4, 83.1, 88, 93.2,
@@ -21,15 +27,24 @@ double noteFreqArrRecv[] = {  /* Mario victory */
 790, 837, 887, 940, 996, 1050, 1110, 1180, 1250, 1320, 1400, 1490,
 1580, 1670, 1770, 1870, 1990, 2100};
 
-int noteDurationArrSend[] = {
-  100, 100, 100, 100, 100, 100, 300, 300, 100, 100, 100, 100, 100, 100, 300, 300, 100, 100, 100, 100, 100, 100, 300, 100, 100, 100, 400
+//int noteDurationArrSend[] = { /* Mario Victory */
+//   100, 100, 100, 300, 100, 100, 100, 400
+//};
+
+//int noteDurationArrSend[] = { /*Jingle bell */
+//   400, 400, 800
+//};
+
+
+int noteDurationArrSend[] = { /*Jingle bell */
+   500 ,500, 250, 250, 500, 500/*, 250, 250, 500, 500, 250, 250, 500, 500, 250*/
 };
 
-int noteDurationArrRecv[] = {
+int noteDurationArrRecv[] = { 
   250
 };
 
-int countTonesSend = 32;
+int countTonesSend = 15;
 int countTonesRecv = 0;
 const int pinBuzzer = 8;
  
@@ -94,15 +109,16 @@ void loop() {
   playNote(17,250);
   */
   play_tone("send");
+  while(1) {}
 }
  
 void playNote(int noteInt, double noteFreqArr[], int noteDurationArr[], long breath = 20) 
 {
-  noteDurationArr[0] = noteDurationArr[0] - breath;
-  buzz(pinBuzzer, noteFreqArr[noteInt], noteDurationArr[0]);
-  //if(breath > 0) { //take a short pause or 'breath' if specified
+  noteDurationArr[noteInt] = noteDurationArr[noteInt] - breath;
+  buzz(pinBuzzer, noteFreqArr[noteInt], noteDurationArr[noteInt]);
+  if(breath > 0) { //take a short pause or 'breath' if specified
     delay(50);
-  //}
+  }
 }
 
 void play_tone(String mode)
@@ -111,9 +127,10 @@ void play_tone(String mode)
   int i;
 
   if (mode.equals("send")) {
-    Serial.println("Sonido de enviar");
-    for (i = 0 ; i < countTonesSend ; i++)
+    for (i = 0 ; i < countTonesSend ; i++) {
+      Serial.println("Sonido de enviar");
       playNote(i, noteFreqArrSend, noteDurationArrSend);
+    }
   } else if (mode.equals("recv")) {
     for (i = 0 ; i < countTonesRecv ; i++)
       playNote(i, noteFreqArrRecv, noteDurationArrRecv);

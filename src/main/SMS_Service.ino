@@ -3,9 +3,20 @@ void sendMessage()
     
     Serial.println("+34637172416:"); // Get number
     //print_msg_LCD(5);/* LCD */
+    delay(3000);
     
     do { // If data is available to read
-        msg_send = Serial.readString();     // Read the message
+        while(!Serial.available()) {}
+        while (Serial.available())
+        {
+          if (Serial.available() >0)
+          {
+            char c = Serial.read();  //gets one byte from serial buffer
+            msg_send += c; //makes the string readString
+          }
+        }
+        
+        // msg_send = Serial.readString();     // Read the message
         //Serial.println("Esperando...");
         if (sms.available()){
           Serial.println();
@@ -21,12 +32,13 @@ void sendMessage()
 
     delay(5000);
     //print_msg_LCD(1);/* LCD */
-    Serial.println(msg_send);
+    Serial.println("El mensaje a mandar es: " + msg_send);
 
     // Turns on second green LED
     digitalWrite(pinLED_2, HIGH);
 
     int num = sms.beginSMS(receiver_phoneNumber);
+    Serial.println("El numero es:" + String(num));
     num = sms.print(msg_send);
     sms.endSMS();
     play_tone("send");

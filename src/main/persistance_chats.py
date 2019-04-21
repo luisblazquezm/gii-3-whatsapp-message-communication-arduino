@@ -3,6 +3,8 @@
 ##############
 ## requires pySerial to be installed 
 import serial
+import syslog
+import time
 
 serial_port = '/dev/cu.usbmodem14201';
 baud_rate = 9600; #In arduino, Serial.begin(baud_rate)
@@ -13,5 +15,15 @@ ser = serial.Serial(serial_port, baud_rate)
 
 while True:
     line = ser.readline();
-    line = line.decode("utf-8") #ser.readline returns a binary, convert to string
+    line = line.decode("ascii") #ser.readline returns a binary, convert to string
+    print(line);
+
+    if line.find(":") != -1:
+        st = raw_input("Content ")
+        print(st);
+        ser.flush();
+        setTemp1 = str(st)
+        ser.write(setTemp1)
+        time.sleep(1)
+	
     output_file.write(line);

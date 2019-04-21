@@ -44,6 +44,10 @@ String msg_send = "";                 // Message to send through the serial port
 String msg_recv = "";                 // Message to receive from the serial port from another phone number
 String phoneNumber = "";              // Phone number of the receiver
 String pN = "";
+
+
+String sender_phoneNumber_str = "";
+String receiver_phoneNumber_str = "";
 char sender_phoneNumber[20];          // Variable used to store the number of the SENDER
 char receiver_phoneNumber[20];        // Variable used to store the number of the RECEIVER
 int8_t answer;
