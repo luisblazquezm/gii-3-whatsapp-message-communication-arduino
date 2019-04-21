@@ -1,4 +1,5 @@
-void test_LCD() /* DEBUG */
+/*
+void test_LCD() 
 {
   
 
@@ -67,3 +68,4 @@ void print_msg_LCD(int mode)
     lcd.clear();
   }
 }
+*/
