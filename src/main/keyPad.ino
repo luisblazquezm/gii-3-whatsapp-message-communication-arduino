@@ -2,75 +2,77 @@
 /* Captures the key pressed in the keypad from the pin detected by the code */
 char getKeyT() 
 {
+  const unsigned long period=50;  // Little period used to prevent error
   if(millis()-kdelay>period) {
     kdelay=millis();  //capture time from millis function
     switch (keypad()) {
       
             case 0:
-            flag = true;
-            return '1';
-       break;  
+              flag = true;
+              return '1';
+ 
             case 1:
-            flag = true;
-            return '2';
-       break;
+              flag = true;
+              return '2';
+
             case 2:
-            flag = true;
-            return '3';
-       break;
+              flag = true;
+              return '3';
+
             case 3:
-            flag = true;
-            return 'A';
-       break;
+              flag = true;
+              return 'A';
+
             case 4:
-            flag = true;
-            return '4';
-       break;
+              flag = true;
+              return '4';
+
             case 5:
-            flag = true;
-            return '5';
-       break;
+              flag = true;
+              return '5';
+
             case 6:
-            flag = true;
-            return '6';
-       break;
+              flag = true;
+              return '6';
+
             case 7:
-            flag = true;
-            return 'B';
-       break;
+              flag = true;
+              return 'B';
+
             case 8:
-            flag = true;
-            return '7';
-       break;
+              flag = true;
+              return '7';
+
             case 9:
-            flag = true;
-            return '8';
-       break;
+              flag = true;
+              return '8';
+
             case 10:
-            flag = true;
-            return '9';
-       break;
+              flag = true;
+              return '9';
+              
             case 11:
-            flag = true;
-            return 'C';
-       break;
+              flag = true;
+              return 'C';
+
             case 12:
-            flag = true;
-            return '*';
-       break;
+              flag = true;
+              return '*';
+
             case 13:
-            return '0';
-       break;
+              flag = true;
+              return '0';
+
             case 14:
-            flag = true;
-            return '#';
-       break;
+              flag = true;
+              return '#';
+
             case 15:
-            flag = true;
-            return 'D';
-       break;
+              flag = true;
+              return 'D';
+              
             default:
-            flag = false;
+              flag = false;
     }
   }
 }
@@ -79,6 +81,8 @@ char getKeyT()
 byte keypad() 
 {
     static bool no_press_flag=0;  // Static flag used to ensure no button is pressed 
+    byte h=0,v=0;                   // Variables used in for loops
+      
     for(byte x=0;x<columns;x++) {
       
        if (digitalRead(Input[x])==HIGH);   // Read evry input if high continue else break;
@@ -124,14 +128,21 @@ byte keypad()
 /* Function to make look like we are unlocking a phone to access to Whatsapp service */
 void unlockPhone() 
 {
+  char key = 'p';                 // Variable to control the key pressed
   int iteracion = 0;
   String code;
   String phrase;
-  
+  int intentos = 0;
+  String mobile_code = "4568";     // Code to unlock the program using the keypad
+
   Serial.println("Introduzca el codigo de desbloqueo");
   //print_msg_LCD(3);/* LCD */
   
   do {
+    if(intentos == 3){
+      terminar_programa();
+    }
+    
     key = getKeyT();       // Recogemos la clave pulsada en el teclado
     
     if (flag) {
@@ -149,7 +160,8 @@ void unlockPhone()
       //lcd.clear();/* LCD */
       //print_msg_LCD(3);/* LCD */
       
-      Serial.println("Contraseña erronea");
+      Serial.println("Contraseña erronea, introduzcala de nuevo");
+      intentos++;
       code = "";
     }
   } while(!code.equals(mobile_code));
@@ -159,5 +171,14 @@ void unlockPhone()
   delay(1000);
   //lcd.clear();/* LCD */
   
-  Serial.println("BIENVENIDO!!!!!!!");
+  whatsapp_serial_limpiar_pantalla_inicio();
+    
+  Serial.println("  ########  #### ######## ##    ## ##     ## ######## ##    ## #### ########   #######   ");
+  Serial.println("  ##     ##  ##  ##       ###   ## ##     ## ##       ###   ##  ##  ##     ## ##     ##  ");
+  Serial.println("  ##     ##  ##  ##       ####  ## ##     ## ##       ####  ##  ##  ##     ## ##     ##  ");
+  Serial.println("  ########   ##  ######   ## ## ## ##     ## ######   ## ## ##  ##  ##     ## ##     ##  ");
+  Serial.println("  ##     ##  ##  ##       ##  ####  ##   ##  ##       ##  ####  ##  ##     ## ##     ##  ");
+  Serial.println("  ##     ##  ##  ##       ##   ###   ## ##   ##       ##   ###  ##  ##     ## ##     ##  ");
+  Serial.println("  ########  #### ######## ##    ##    ###    ######## ##    ## #### ########   #######   ");
+  
 }

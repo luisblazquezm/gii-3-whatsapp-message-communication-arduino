@@ -1,7 +1,12 @@
 #include "main.h"
 
 void setup() {
-  // Initialize serial communications and wait for port to open:
+
+  GSM gsmAccess;
+  boolean notConnected = true;     // GSM Connection state
+  char pin[] = "5056";             // PIN number of the SIM Card of the GSM Shield we are using
+  
+  // Initialize serial communications and wait for port to open
   Serial.begin(9600);
     
   while (!Serial) {
@@ -22,7 +27,9 @@ void setup() {
   /* Unlock the phone using the Keypad */
   unlockPhone();
 
-  Serial.println("Accessing Whatsapp application");
+  Serial.println("  =======================================================================================");
+  Serial.println("                              Accessing Whatsapp application                             ");
+  Serial.println("  =======================================================================================");
   
   // Start GSM shield
   // If your SIM has PIN, pass it as a parameter of begin() in quotes
@@ -37,19 +44,18 @@ void setup() {
       delay(1000);
     }
   }
-  //Serial.clear();<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   
   //lcd.setCursor(0,0); /* LCD */
   //lcd.print('>' + remoteNum1); // From 12 -> 15 /* LCD */
   //print_msg_LCD(4);/* LCD */
 
   Serial.println("Introduzca el numero de telefono:");
+  Serial.println("phone_number");
   int i = 0;
   while (1) {
     while (!Serial.available()) {}
     while (Serial.available()) 
     {
-      Serial.println("Alla vamos");
       delay(300);  //delay to allow buffer to fill VERY IMPORTANT, it worked beacuse of this
       if (Serial.available() >0)
       {
@@ -65,6 +71,8 @@ void setup() {
   receiver_phoneNumber[i] = '\0';
   Serial.println("El numero introducido es " + String(receiver_phoneNumber));
 
+  whatsapp_serial_limpiar_pantalla_menus();
+
   // Pins for LEDs
   pinMode(A0, OUTPUT); // LED verde (cuando se envia el mensaje)
   pinMode(A1, OUTPUT); // LED verde (cuando aparece nuestro mensaje en la pantalla) . Simboliza que el el recptero lo ha recibido 
@@ -75,17 +83,6 @@ void setup() {
 // Main code of the program. Bidirecctional communication
 void loop() {    
 
-  //whatsapp_serial_menu();
-  
-  /* Here comes the menu GUI */
-  
-  if (sms.available()) {
-    // Get SIM number and print it 
-    sms.remoteNumber(receiver_phoneNumber, 20);
-    recvMessage();
-  } else {
-    sendMessage();
-  }
-  
-
+  whatsapp_serial_menu();
+ 
 }
