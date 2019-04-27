@@ -226,7 +226,7 @@ void whatsapp_volver_menu(){
 
 void whatsapp_serial_limpiar_pantalla_menus(){
   int numLineasEliminar = 0;
-  while(numLineasEliminar < 25){
+  while(numLineasEliminar < 30){
     Serial.println(" ");
     numLineasEliminar++;
   }
@@ -235,7 +235,7 @@ void whatsapp_serial_limpiar_pantalla_menus(){
 
 void whatsapp_serial_limpiar_pantalla_inicio(){
   int numLineasEliminar = 0;
-  while(numLineasEliminar < 50){
+  while(numLineasEliminar < 70){
     Serial.println(" ");
     numLineasEliminar++;
   }
@@ -243,7 +243,7 @@ void whatsapp_serial_limpiar_pantalla_inicio(){
 
 void whatsapp_serial_limpiar_pantalla_fin(){
   int numLineasEliminar = 0;
-  while(numLineasEliminar < 100){
+  while(numLineasEliminar < 110){
     Serial.println(" ");
     numLineasEliminar++;
   }
