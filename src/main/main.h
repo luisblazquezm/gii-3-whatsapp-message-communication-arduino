@@ -35,6 +35,7 @@ GSM_SMS sms;
 char sender_phoneNumber[20];          // Variable used to store the number of the SENDER
 char receiver_phoneNumber[13];        // Variable used to store the number of the RECEIVER
 int8_t answer;
+int value = -1;
 
 /* ============================= PANTALLA LCD ============================= */
 

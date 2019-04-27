@@ -6,13 +6,19 @@ void start_communication()
       sms.remoteNumber(receiver_phoneNumber, 20);
       recvMessage();
     } else {
-      sendMessage();
+      value = sendMessage();
+      if (value == 0){
+        digitalWrite(pinLED_2, LOW);
+        break;
+      }
     }
   }
+  
+  whatsapp_serial_enviar_mensaje();
 }
 
 
-void sendMessage()
+int sendMessage()
 { 
     String msg_send = "";                 // Message to send through the serial port to the mobile number
     Serial.println("messages_1");
@@ -21,12 +27,14 @@ void sendMessage()
     
     do { // If data is available to read
         while(!Serial.available()) { 
+          //Serial.println("Aqui !serial");
           if (sms.available()) 
             break;
         }
         
         while (Serial.available())
         {
+          //Serial.println("Aqui serial");
           delay(300);  //delay to allow buffer to fill 
           if (Serial.available() >0)
           {
@@ -36,13 +44,19 @@ void sendMessage()
         }
         
         if (sms.available()){
-            Serial.println("***1 message received***");
+            //Serial.println("***1 message received***");
             //print_msg_LCD(6);/* LCD */
             recvMessage();
           }
+         //Serial.println("Aqui fuera");
         // msg_send = Serial.readString();     // Read the message
         //Serial.println("Esperando...");
     } while (msg_send.equals(""));
+
+    if (msg_send.equals("exit")) {
+      digitalWrite(pinLED_2, HIGH);
+      return 0;
+    }
     
     // Turns on second green LED
     //lcd.clear();/* LCD */
@@ -50,7 +64,7 @@ void sendMessage()
 
     delay(5000);
     //print_msg_LCD(1);/* LCD */
-    Serial.println("\t\t\t\t" + msg_send);
+    //Serial.println("\t\t\t\t" + msg_send);
 
     // Turns on second green LED
     digitalWrite(pinLED_2, HIGH);
@@ -64,6 +78,8 @@ void sendMessage()
 
     digitalWrite(pinLED_1, LOW);
     digitalWrite(pinLED_2, LOW);
+
+    return 1;
 }
 
 void recvMessage()
