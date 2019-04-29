@@ -132,22 +132,27 @@ void whatsapp_serial_contactos()
   Serial.println("#                                                                                        #");
   Serial.println("##########################################################################################");
 
-  Serial.println("Cargando contactos. Espere por favor...");
+  Serial.println("Cargando lista de contactos, espere por favor...");
   Serial.println("contacts_transfer");
   delay(3000);
-  while (Serial.available())
-  {
+  while(!Serial.available()) {}
+        
+  while (Serial.available()) {
     delay(300);  //delay to allow buffer to fill 
     if (Serial.available() >0)
     {
-      while (c = Serial.read())  
-        contact += c; 
+      char c = Serial.read();  //gets one byte from serial buffer
+      if (c == '\n') {
+        Serial.println("#            " + contact + "                                                             #");
+        contact = "";
+      }
+      contact += c; //makes the string readString
     }
-    
   }
   
-  Serial.println(contact);   
   
+  Serial.println("##########################################################################################");
+ 
   do{
     do{
       key = getKeyT();

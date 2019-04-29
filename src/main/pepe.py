@@ -30,7 +30,7 @@ termin = False
 
 def kbdListener():
     global setTempCar1, finished
-    setTempCar1 = raw_input("\t\t\t\t")
+    setTempCar1 = raw_input("\t\t\t\t::")
     ser.flush()
     serTemp1 = str(setTempCar1)
     #print("Escribiendo envio en fichero...")
@@ -61,6 +61,7 @@ while (1):
                 #print "Received new keyboard Input. Setting playing ID to keyboard input value"
                 playingID = setTempCar1
             elif setTempCar1 == "exit":
+                print("Me salgo")
                 # Kill thread
                 break
             else:
@@ -117,7 +118,6 @@ while (1):
             chr_rcv = ser.readline()
             chr_rcv = chr_rcv[:-2]
             if chr_rcv == "recv_off":
-                print("Me salgo")
                 break
             print(chr_rcv)
             msg_rcv = msg_rcv + chr_rcv
@@ -127,8 +127,9 @@ while (1):
         chats_file.write(msg_rcv) 
     elif serial_content == "contacts_transfer":
         for x in contacts_file:
-            print(x)
+            #print(x)
             ser.write(x)
+            time.sleep(5)
     else:
         print (serial_content)
 
