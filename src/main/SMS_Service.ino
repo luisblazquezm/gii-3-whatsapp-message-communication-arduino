@@ -1,5 +1,11 @@
-void start_communication() 
+void start_communication(String option) 
 {
+  if (option.equals("contact")) {
+     get_contact_number();
+  } else if (option.equals("unknown_number")) {
+     introduce_number_serial();
+  }
+  
   while(1) {
     if (sms.available()) {
       // Get SIM number and print it 
@@ -142,4 +148,57 @@ int readSerial(char result[])
       }
     }
   }
+}
+
+void introduce_number_serial()
+{
+  Serial.println("Introduzca el numero de telefono:");
+  Serial.println("phone_number");
+  int i = 0;
+  while (1) {
+    while (!Serial.available()) {}
+    while (Serial.available()) 
+    {
+      delay(300);  //delay to allow buffer to fill VERY IMPORTANT, it worked beacuse of this
+      if (Serial.available() >0)
+      {
+        char c = Serial.read();  //gets one byte from serial buffer
+        receiver_phoneNumber[i] = c; //makes the string readString
+        i++;
+      }
+      if (i == 12) break;
+    }
+    if (i == 12) break;
+  }
+  
+  receiver_phoneNumber[i] = '\0';
+  Serial.println("El numero introducido es " + String(receiver_phoneNumber));
+  
+}
+
+void get_contact_number()
+{
+  Serial.println("Introduzca el contacto:");
+  Serial.println("contacts_msg");
+  int i = 0;
+  while (1) {
+    while (!Serial.available()) {}
+    while (Serial.available()) 
+    {
+      delay(300);  //delay to allow buffer to fill VERY IMPORTANT, it worked beacuse of this
+      if (Serial.available() >0)
+      {
+        char c = Serial.read();  //gets one byte from serial buffer
+        receiver_phoneNumber[i] = c; //makes the string readString
+        i++;
+        Serial.println(c);
+      }
+      if (i == 12) break;
+    }
+    if (i == 12) break;
+  }
+  
+  receiver_phoneNumber[i] = '\0';
+  Serial.println("El numero del contacto es " + String(receiver_phoneNumber));
+
 }

@@ -153,3 +153,33 @@ Hi
 Ok
 				exit
 
+5507:
+
+BUZON MOVISTAvie, 03 - 18:01 llamada de 550
+				Hola
+
+				exit
+
+				
+
++34912135900:
+
+BUZON MOVISTAvie, 03 - 19:01 llamada de 91213590Ha recibido una llamada sin mensaje. Si desea devolver la llamada pulse sobre el numer
++34662991273:
+
+BUZON MOVISTAvie, 03 - 19:01 llamada de 91213590Ha recibido una llamada sin mensaje. Si desea devolver la llamada pulse sobre el numer
+BUZON MOVISTAvie, 03 - 19:21 llamada de 66299127Ha recibido una llamada sin mensaje. Si desea devolver la llamada pulse sobre el numer
+				Hola
+
+				Dime que llego
+
+				exit
+
+				
+
+				Funciona
+
+				exit
+
+				
+

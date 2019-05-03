@@ -86,7 +86,7 @@ void whatsapp_serial_enviar_mensaje()
     
     switch(key) {
       case '1':
-        start_communication();
+        start_communication("contact");
         break;
       case '2':
         break;
@@ -132,7 +132,11 @@ void whatsapp_serial_contactos()
   Serial.println("#                                                                                        #");
   Serial.println("##########################################################################################");
 
-  Serial.println("Cargando lista de contactos, espere por favor...");
+  Serial.println("#                    Cargando lista de contactos, espere por favor...                    #");
+  Serial.println("#                                                                                        #");
+  Serial.println("##########################################################################################");
+  Serial.println("#            NOMBRE        TELEFONO                                                      #");
+  Serial.println("##########################################################################################");
   Serial.println("contacts_transfer");
   delay(3000);
   while(!Serial.available()) {}
@@ -143,10 +147,11 @@ void whatsapp_serial_contactos()
     {
       char c = Serial.read();  //gets one byte from serial buffer
       if (c == '\n') {
-        Serial.println("#            " + contact + "                                                             #");
+        Serial.println("#            " + contact + "                                                     #");
         contact = "";
+      } else {
+        contact += c; //makes the string readString
       }
-      contact += c; //makes the string readString
     }
   }
   
@@ -160,10 +165,13 @@ void whatsapp_serial_contactos()
     
     switch(key) {
       case '1':
+        Serial.println("contacts_add");
         break;
       case '2':
+        Serial.println("contacts_delete");
         break;
       case '3':
+        Serial.println("contacts_modify");
         break;
       case '4':
         whatsapp_volver_menu();
@@ -261,6 +269,8 @@ void terminar_programa(){
   Serial.println("  =======================================================================================");
   delay(5000);
   whatsapp_serial_limpiar_pantalla_fin();
+  Serial.println("terminate");
+  delay(8000);
   exit(0);
 }
 

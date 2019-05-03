@@ -4,6 +4,8 @@ import syslog
 import time
 import threading
 import time
+import re
+import fileinput
 
 #The following line is for serial over GPIO
 serial_port = '/dev/cu.usbmodem14201';
@@ -12,7 +14,6 @@ baud_rate = 9600; #In arduino, Serial.begin(baud_rate)
 chats_file_path = "chats.txt";
 contacts_file_path = "contacts.txt";
 
-contacts_file = open(contacts_file_path, "r")
 chats_file = open(chats_file_path, "a+");
 
 ser = serial.Serial(serial_port, baud_rate)
@@ -24,6 +25,7 @@ phone_number = ""
 msg_rcv = ""
 
 setTempCar1 = ''
+contact_var = ''
 playingID = ''
 finished = True
 termin = False
@@ -47,7 +49,7 @@ while (1):
     serial_content = serial_content[:-2]
 
     if serial_content == "phone_number":
-        setTempCar1 = raw_input("phoneNumber: ")
+        setTempCar1 = raw_input("Telefono: ")
         ser.flush()
         serTemp1 = str(setTempCar1)
         ser.write(serTemp1)
@@ -126,10 +128,87 @@ while (1):
         msg_rcv = msg_rcv + "\n"
         chats_file.write(msg_rcv) 
     elif serial_content == "contacts_transfer":
+        contacts_file = open(contacts_file_path, "r");
+
         for x in contacts_file:
             #print(x)
             ser.write(x)
             time.sleep(5)
+    elif serial_content == "contacts_msg":
+        contact_var = raw_input("Contacto: ")
+        ser.flush()
+        serTemp1 = str(contact_var)
+
+        with open(contacts_file_path) as search:
+            for line in search:
+                line = line.rstrip()  # remove '\n' at end of line
+                #print(serTemp1)
+                #print(line)
+                if serTemp1 in line:
+                    print("Contacto encontrado")
+                    print(line)
+                    start = line.find('+')
+                    end = line.find('*', start)
+                    print (line[start:end])
+                    ser.write(line[start:end])
+                    break
+                else:
+                    print("El contacto introducido no existe")
+
+        setTempCar1 = ''
+        search.close()
+    elif serial_content == "contacts_add":
+        contacts_file = open(contacts_file_path, "a+");
+
+        print("Introduzca el nombre y telefono movil del nuevo contacto")
+        name_contact = raw_input("Nombre: ")
+        phone_contact = raw_input("Telefono: ")
+        row = name_contact + " " + phone_contact + "*\n"
+        contacts_file.write(row)
+    elif serial_content == "contacts_delete":
+        print("Introduzca el nombre del contacto a eliminar")
+        name_contact = raw_input("Nombre: ")
+
+        with open(contacts_file_path, "r") as f:
+            lines = f.readlines()
+
+        with open(contacts_file_path, "w") as f:
+            for line in lines:
+                if name_contact not in line.strip("\n"):
+                    f.write(line)
+    elif serial_content == "contacts_modify":
+        print("Introduzca el nombre del contacto a eliminar")
+        name_contact = raw_input("Nombre: ")
+        new_name_contact = raw_input("Nuevo nombre: ")
+        new_phone_contact = raw_input("Nuevo telefono: ")
+
+        with open(contacts_file_path) as search:
+            for line in search:
+                line = line.rstrip()  # remove '\n' at end of line
+                if name_contact in line:
+                    print(line)
+                    start = line.find('+')
+                    end = line.find('*', start)
+                    phone_contact = line[start:end]
+
+                # Read in the file
+        with open(contacts_file_path, 'r') as file :
+          filedata = file.read()
+
+        # Replace the target string
+        if new_name_contact != '':
+            filedata = filedata.replace(name_contact, new_name_contact)
+
+        if new_phone_contact != '':
+            filedata = filedata.replace(phone_contact, new_phone_contact)
+
+        # Write the file out again
+        with open(contacts_file_path, 'w') as file:
+          file.write(filedata)
+
+    elif serial_content == "terminate":
+        print "Exiting"
+        exit()
     else:
         print (serial_content)
 

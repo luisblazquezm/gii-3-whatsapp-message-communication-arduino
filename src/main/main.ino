@@ -49,28 +49,6 @@ void setup() {
   //lcd.print('>' + remoteNum1); // From 12 -> 15 /* LCD */
   //print_msg_LCD(4);/* LCD */
 
-  Serial.println("Introduzca el numero de telefono:");
-  Serial.println("phone_number");
-  int i = 0;
-  while (1) {
-    while (!Serial.available()) {}
-    while (Serial.available()) 
-    {
-      delay(300);  //delay to allow buffer to fill VERY IMPORTANT, it worked beacuse of this
-      if (Serial.available() >0)
-      {
-        char c = Serial.read();  //gets one byte from serial buffer
-        receiver_phoneNumber[i] = c; //makes the string readString
-        i++;
-      }
-      if (i == 12) break;
-    }
-    if (i == 12) break;
-  }
-  
-  receiver_phoneNumber[i] = '\0';
-  Serial.println("El numero introducido es " + String(receiver_phoneNumber));
-
   whatsapp_serial_limpiar_pantalla_menus();
 
   // Pins for LEDs
