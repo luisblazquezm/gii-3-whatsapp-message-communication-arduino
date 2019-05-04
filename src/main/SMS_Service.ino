@@ -9,7 +9,6 @@ void start_communication(String option)
   while(1) {
     if (sms.available()) {
       // Get SIM number and print it 
-      sms.remoteNumber(receiver_phoneNumber, 20);
       recvMessage();
     } else {
       value = sendMessage();
@@ -93,6 +92,8 @@ void recvMessage()
   char c;
   int i = 0;
   String msg_recv = "";                 // Message to receive from the serial port from another phone number
+
+  sms.remoteNumber(unk_receiver_phoneNumber, 20);
   
   // This is just an example of message disposal    
   // Messages starting with # should be discarded
@@ -104,7 +105,12 @@ void recvMessage()
 
   // Read message bytes and print them
   Serial.println("recv_on");
-  Serial.println(String(receiver_phoneNumber) + ":");
+  if(strcmp(unk_receiver_phoneNumber, receiver_phoneNumber) == 0) {
+    Serial.println(String(receiver_phoneNumber) + ":");
+  } else {
+    Serial.println(String(unk_receiver_phoneNumber) + ":");
+  }
+  
   while(c=sms.read()) {
     msg_recv = msg_recv + c;
     //Serial.println(c);
@@ -191,7 +197,7 @@ void get_contact_number()
         char c = Serial.read();  //gets one byte from serial buffer
         receiver_phoneNumber[i] = c; //makes the string readString
         i++;
-        Serial.println(c);
+        //Serial.println(c);
       }
       if (i == 12) break;
     }
