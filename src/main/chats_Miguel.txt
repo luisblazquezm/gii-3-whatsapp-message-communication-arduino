@@ -35,3 +35,10 @@ False
 
 				
 
+Uno 
+Dos
+				exit
+
+				
+
+Hola

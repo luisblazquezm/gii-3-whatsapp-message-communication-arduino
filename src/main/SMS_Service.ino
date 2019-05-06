@@ -1,10 +1,6 @@
-void start_communication(String option) 
+void start_communication() 
 {
-  if (option.equals("contact")) {
-     get_contact_number();
-  } else if (option.equals("unknown_number")) {
-     introduce_number_serial();
-  }
+  get_contact_number();
   
   while(1) {
     if (sms.available()) {
@@ -105,6 +101,7 @@ void recvMessage()
 
   // Read message bytes and print them
   Serial.println("recv_on");
+  
   if(strcmp(unk_receiver_phoneNumber, receiver_phoneNumber) == 0) {
     Serial.println(String(receiver_phoneNumber) + ":");
   } else {
@@ -205,6 +202,6 @@ void get_contact_number()
   }
   
   receiver_phoneNumber[i] = '\0';
-  Serial.println("El numero del contacto es " + String(receiver_phoneNumber));
+  //Serial.println("El numero del contacto es " + String(receiver_phoneNumber));
 
 }

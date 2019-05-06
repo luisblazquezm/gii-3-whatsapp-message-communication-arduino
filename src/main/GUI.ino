@@ -73,9 +73,8 @@ void whatsapp_serial_enviar_mensaje()
   Serial.println("#  Seleccione una opcion por favor                                                              #");
   Serial.println("#                                                                                               #");
   Serial.println("#   1 -  Enviar mensaje por privado                                                             #");
-  Serial.println("#   2 -  Enviar mensaje por un grupo                                                            #");
-  Serial.println("#   3 -  Enviar mensaje de difusion                                                             #");
-  Serial.println("#   4 -  Volver                                                                                 #");
+  Serial.println("#   2 -  Enviar mensaje de difusion                                                             #");
+  Serial.println("#   3 -  Volver                                                                                 #");
   Serial.println("#                                                                                               #");
   Serial.println("#################################################################################################");
 
@@ -86,7 +85,7 @@ void whatsapp_serial_enviar_mensaje()
     
     switch(key) {
       case '1':
-        start_communication("contact");
+        start_communication();
         break;
       case '2':
         break;
