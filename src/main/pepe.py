@@ -204,11 +204,9 @@ while (1):
         if phone_number == phone_number_contact:
             chats_file.write(msg_rcv)
         else:
-            chat_new_file.write(msg_rcv); 
-
-        chats_file.close()
-        chat_new_file.close()
-
+            chat_new_file.write(msg_rcv);
+            chat_new_file.close()
+        
     elif serial_content == "contacts_transfer":
 
         contacts_file = open(contacts_file_path, "r");

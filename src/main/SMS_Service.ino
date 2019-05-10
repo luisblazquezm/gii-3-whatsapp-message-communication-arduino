@@ -23,7 +23,7 @@ int sendMessage()
 { 
     String msg_send = "";                 // Message to send through the serial port to the mobile number
     Serial.println("messages_1");
-    //print_msg_LCD(5);/* LCD */
+    print_msg_LCD("Introduce_message", "");/* LCD */
     delay(3000);
     
     do { // If data is available to read
@@ -46,7 +46,7 @@ int sendMessage()
         
         if (sms.available()){
             //Serial.println("***1 message received***");
-            //print_msg_LCD(6);/* LCD */
+            print_msg_LCD("Received", "");/* LCD */
             recvMessage();
           }
          //Serial.println("Aqui fuera");
@@ -60,11 +60,11 @@ int sendMessage()
     }
     
     // Turns on second green LED
-    //lcd.clear();/* LCD */
+    lcd.clear();/* LCD */
     digitalWrite(pinLED_1, HIGH);
 
     delay(5000);
-    //print_msg_LCD(1);/* LCD */
+    print_msg_LCD("msg_send", msg_send);/* LCD */
     //Serial.println("\t\t\t\t" + msg_send);
 
     // Turns on second green LED
@@ -73,7 +73,6 @@ int sendMessage()
     int num = sms.beginSMS(receiver_phoneNumber);
     num = sms.print(msg_send);
     sms.endSMS();
-    //play_tone("send");
     //Serial.println("Mensaje enviado!");
     delay(2000);
 
@@ -112,9 +111,11 @@ void recvMessage()
     msg_recv = msg_recv + c;
     //Serial.println(c);
   }
+  
   Serial.println(msg_recv);
   Serial.println("recv_off");
-  //print_msg_LCD(2);/* LCD */
+
+  play_tone("recv");
 
   // Turns on blue LED
   while (i < 5) {
@@ -125,6 +126,8 @@ void recvMessage()
     i++;
   }
   digitalWrite(pinLED_3, LOW);
+
+  print_msg_LCD("msg_recv", msg_recv);/* LCD */
   
   // delete message from modem memory
   sms.flush();
@@ -202,6 +205,8 @@ void get_contact_number()
   }
   
   receiver_phoneNumber[i] = '\0';
+  //lcd.print('>' + sender_phoneNumber); // From 12 -> 15 /* LCD */
+  print_msg_LCD("Telephone numbers", "");/* LCD */
   //Serial.println("El numero del contacto es " + String(receiver_phoneNumber));
 
 }

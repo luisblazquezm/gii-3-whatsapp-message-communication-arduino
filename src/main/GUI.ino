@@ -21,33 +21,69 @@ void whatsapp_serial_menu()
   Serial.println("#                                                                                    #");
   Serial.println("#   1 -  Enviar mensaje                                                              #");
   Serial.println("#   2 -  Lista de contactos                                                          #");
-  Serial.println("#   3 -  Configuracion de los tonos de notificacion                                  #");
-  Serial.println("#   4 -  Salir                                                                       #");
+  Serial.println("#   3 -  Salir                                                                       #");
   Serial.println("#                                                                                    #");
   Serial.println("######################################################################################");
+ 
+ int actual = 0;
+ int flag_enter = 0;
+ char mov;
+ String menu1[3] = {"1- Enviar mensaje", "2- Lista de contactos", "3- Salir"};
 
-  do{
-    do{
-      key = getKeyT();
-    }while(flag == false);
-  
-    switch(key) {
-      case '1':
+ lcd.clear();
+ 
+ lcd.setCursor(0, 0); 
+ lcd.write (byte (5));
+ lcd.setCursor(1, 0);
+ lcd.print(menu1[0]);
+ 
+ lcd.setCursor(0, 1); 
+ lcd.print(menu1[1]);
+
+ while(!flag_enter){
+    delay(100);
+    mov = getJoystickDirection();
+    //Serial.println(mov); 
+   //Serial.println("Actual =>>> "+ String(mov));
+   switch(mov){
+      case 'W':
+        //Serial.println("Actual W: "+ String(actual));
+        if (actual >= 1){
+          if (actual > 1) actual--; // actual = 2,3
+          getMenu(actual, menu1);
+        } 
+        break;
+      case 'S':
+        //Serial.println("Actual S: "+ String(actual));
+        if (actual <= limit){
+          if (actual < limit) actual++; // actual = 1,2
+          getMenu(actual, menu1);
+        }
+        break;
+      case 'O':
+        flag_enter = 1;
+        break;
+      default:
+        break;
+   }
+ }
+
+ if (actual == 0) actual = 1;
+
+    switch(actual) {
+      case 1:
         whatsapp_serial_enviar_mensaje();
         break;
-      case '2':
+      case 2:
         whatsapp_serial_contactos();
         break;
-      case '3':
-        whatsapp_configurar_tono();
-        break;
-      case '4':
+      case 3:
         terminar_programa();
         break;
       default:
         break;
     }
-  }while(key != '1' || key != '2' || key != '3' || key != '4');
+  
 }
 
 void whatsapp_serial_enviar_mensaje()
@@ -73,17 +109,58 @@ void whatsapp_serial_enviar_mensaje()
   Serial.println("#  Seleccione una opcion por favor                                                              #");
   Serial.println("#                                                                                               #");
   Serial.println("#   1 -  Enviar mensaje por privado                                                             #");
-  Serial.println("#   2 -  Enviar mensaje de difusion                                                             #");
-  Serial.println("#   3 -  Volver                                                                                 #");
+  Serial.println("#   2 -  Volver                                                                                 #");
   Serial.println("#                                                                                               #");
   Serial.println("#################################################################################################");
 
-  do{
-    do{
-      key = getKeyT();
-    }while(flag == false);
-    
-    switch(key) {
+ int actual = 0;
+ int flag_enter = 0;
+ char mov;
+ String menu2[2] = {"1- Enviar mensaje por privado", "2- Volver"};
+
+ limit = 2;
+
+ lcd.clear();
+ 
+ lcd.setCursor(0, 0); 
+ lcd.write (byte (5));
+ lcd.setCursor(1, 0);
+ lcd.print(menu2[0]);
+ 
+ lcd.setCursor(0, 1); 
+ lcd.print(menu2[1]);
+
+ while(!flag_enter){
+    delay(100);
+    mov = getJoystickDirection();
+    //Serial.println(mov); 
+   //Serial.println("Actual =>>> "+ String(mov));
+   switch(mov){
+      case 'W':
+        //Serial.println("Actual W: "+ String(actual));
+        if (actual >= 1){
+          if (actual > 1) actual--; // actual = 2,3
+          getMenu(actual, menu2);
+        } 
+        break;
+      case 'S':
+        //Serial.println("Actual S: "+ String(actual));
+        if (actual <= 2){
+          if (actual < 2) actual++; // actual = 1,2
+          getMenu(actual, menu2);
+        }
+        break;
+      case 'O':
+        flag_enter = 1;
+        break;
+      default:
+        break;
+   }
+ }
+
+ if (actual == 0) actual = 1;
+ 
+    switch(actual) {
       case '1':
         start_communication();
         break;
@@ -97,7 +174,7 @@ void whatsapp_serial_enviar_mensaje()
       default:
         break;
     }
-  }while(key != '1' || key != '2' || key != '3' || key != '4');
+  
 }
 
 void whatsapp_serial_contactos()
@@ -156,13 +233,53 @@ void whatsapp_serial_contactos()
   
   
   Serial.println("##########################################################################################");
+
+ int actual = 0;
+ int flag_enter = 0;
+ char mov;
+ String menu3[4] = {"1- Añadir", "2- Eliminar", "3- Modificar", "4- Volver"};
+
+ lcd.clear();
  
-  do{
-    do{
-      key = getKeyT();
-    }while(flag == false);
+ lcd.setCursor(0, 0); 
+ lcd.write (byte (5));
+ lcd.setCursor(1, 0);
+ lcd.print(menu3[0]);
+ 
+ lcd.setCursor(0, 1); 
+ lcd.print(menu3[1]);
+
+ while(!flag_enter){
+    delay(100);
+    mov = getJoystickDirection();
+    //Serial.println(mov); 
+   //Serial.println("Actual =>>> "+ String(mov));
+   switch(mov){
+      case 'W':
+        //Serial.println("Actual W: "+ String(actual));
+        if (actual >= 1){
+          if (actual > 1) actual--; // actual = 2,3
+          getMenu(actual, menu3);
+        } 
+        break;
+      case 'S':
+        //Serial.println("Actual S: "+ String(actual));
+        if (actual <= limit2){
+          if (actual < limit2) actual++; // actual = 1,2
+          getMenu(actual, menu3);
+        }
+        break;
+      case 'O':
+        flag_enter = 1;
+        break;
+      default:
+        break;
+   }
+ }
+
+ if (actual == 0) actual = 1;
     
-    switch(key) {
+    switch(actual) {
       case '1':
         Serial.println("contacts_add");
         break;
@@ -178,56 +295,7 @@ void whatsapp_serial_contactos()
       default:
         break;
     }
-  }while(key != '1' || key != '2' || key != '3' || key != '4');
-}
-
-void whatsapp_configurar_tono()
-{
-  char key = 'p';                 // Variable to control the key pressed
   
-  whatsapp_serial_limpiar_pantalla_menus();
-
-  Serial.println("=====================================================");
-  Serial.println("#  ########  #######  ##    ##  #######   ######    #");
-  Serial.println("#     ##    ##     ## ###   ## ##     ## ##    ##   #");
-  Serial.println("#     ##    ##     ## ####  ## ##     ## ##         #");
-  Serial.println("#     ##    ##     ## ## ## ## ##     ##  ######    #");
-  Serial.println("#     ##    ##     ## ##  #### ##     ##       ##   #");
-  Serial.println("#     ##    ##     ## ##   ### ##     ## ##    ##   #");
-  Serial.println("#     ##     #######  ##    ##  #######   ######    #");
-  Serial.println("=====================================================");                                                                 
-  Serial.println("#                                                   #");
-  Serial.println("#             Lista de tonos dipsonibles            #");
-  Serial.println("#                                                   #");
-  Serial.println("#####################################################");
-  Serial.println("#                                                   #");
-  Serial.println("#  Seleccione una opcion por favor                  #");
-  Serial.println("#                                                   #");
-  Serial.println("#   1 -  Tonos de envio                             #");
-  Serial.println("#   2 -  Tonos de recepcion                         #");
-  Serial.println("#   3 -  Volver                                     #");
-  Serial.println("#                                                   #");
-  Serial.println("#####################################################");
-
-  do{
-    do{
-      key = getKeyT();
-    }while(flag == false);
-    
-    switch(key) {
-      case '1':
-        break;
-      case '2':
-        break;
-      case '3':
-        break;
-      case '4':
-        whatsapp_volver_menu();
-        break;
-      default:
-        break;
-    }
-  }while(key != '1' || key != '2' || key != '3' || key != '4');
 }
 
 void whatsapp_volver_menu(){
@@ -266,9 +334,15 @@ void terminar_programa(){
   Serial.println("  =======================================================================================");
   Serial.println("                                      Terminando...                                      ");
   Serial.println("  =======================================================================================");
+
+  lcd.clear();
+  lcd.print("Saliendo...");
   delay(5000);
+  
   whatsapp_serial_limpiar_pantalla_fin();
+  
   Serial.println("terminate");
+  play_tone("shutdown");
   delay(8000);
   exit(0);
 }

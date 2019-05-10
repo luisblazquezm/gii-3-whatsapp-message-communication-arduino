@@ -8,12 +8,18 @@ void setup() {
   
   // Initialize serial communications and wait for port to open
   Serial.begin(9600);
-    
+  lcd.begin(16,2);//Defining 16 columns and 2 rows of lcd display
+  lcd.backlight();//To Power ON the back light
+  lcd.createChar(5, flechaD);
+  
   while (!Serial) {
     ; // Wait for serial port to connect. Needed for native USB port only
   }
 
   pinMode(pinBuzzer, OUTPUT);
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+  pinMode(kPin, INPUT_PULLUP);
 
   // Initalice the pins for the KeyPad 
   for(byte i=0;i<rows;i++) {
@@ -35,7 +41,6 @@ void setup() {
   // If your SIM has PIN, pass it as a parameter of begin() in quotes
   while(notConnected)
   {
-    Serial.println("Aqui");
     if(gsmAccess.begin("5056", true)==GSM_READY) {
       Serial.println("Connected");
       notConnected = false;
@@ -44,12 +49,13 @@ void setup() {
       delay(1000);
     }
   }
-  
-  //lcd.setCursor(0,0); /* LCD */
-  //lcd.print('>' + remoteNum1); // From 12 -> 15 /* LCD */
-  //print_msg_LCD(4);/* LCD */
+
+  lcd.clear();
+  lcd.setCursor(0,0); /* LCD */
 
   whatsapp_serial_limpiar_pantalla_menus();
+
+  play_tone("startup");
 
   // Pins for LEDs
   pinMode(A0, OUTPUT); // LED verde (cuando se envia el mensaje)

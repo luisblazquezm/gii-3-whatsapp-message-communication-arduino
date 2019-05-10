@@ -136,7 +136,7 @@ void unlockPhone()
   String mobile_code = "4568";     // Code to unlock the program using the keypad
 
   Serial.println("Introduzca el codigo de desbloqueo");
-  //print_msg_LCD(3);/* LCD */
+  print_msg_LCD("keypad", "");/* LCD */
   
   do {
     if(intentos == 3){
@@ -146,7 +146,7 @@ void unlockPhone()
     key = getKeyT();       // Recogemos la clave pulsada en el teclado
     
     if (flag) {
-      //lcd.print(key);/* LCD */
+      lcd.print(key);/* LCD */
       
       code = code + key;
       Serial.println(code);
@@ -154,11 +154,11 @@ void unlockPhone()
     }
 
     if (code.length() == 4 && !code.equals(mobile_code)) {
-      //lcd.clear();/* LCD */
-      //lcd.print("Clave erronea");/* LCD */
+      lcd.clear();/* LCD */
+      lcd.print("Clave erronea");/* LCD */
       delay(1000);
-      //lcd.clear();/* LCD */
-      //print_msg_LCD(3);/* LCD */
+      lcd.clear();/* LCD */
+      print_msg_LCD("keypad", "");/* LCD */
       
       Serial.println("Contraseña erronea, introduzcala de nuevo");
       intentos++;
@@ -166,11 +166,10 @@ void unlockPhone()
     }
   } while(!code.equals(mobile_code));
 
-  //lcd.clear();/* LCD */
-  //lcd.print("Accediendo...");/* LCD */
+  lcd.clear();/* LCD */
+  lcd.print("Accediendo...");/* LCD */
   delay(1000);
-  //lcd.clear();/* LCD */
-  
+    
   whatsapp_serial_limpiar_pantalla_inicio();
     
   Serial.println("  ########  #### ######## ##    ## ##     ## ######## ##    ## #### ########   #######   ");

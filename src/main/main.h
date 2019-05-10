@@ -1,5 +1,8 @@
 #include <GSM.h>
-//#include <LiquidCrystal.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+   
+#define kPin      9 
 
 // Other variables 
 const byte rows=4;               // Number of rows of keypad
@@ -19,9 +22,6 @@ const int pinBuzzer = 8;
 const byte Output[rows]={25,27,29,31};      // Array of pins used as output for rows of keypad
 const byte Input[columns]={33,35,37,39};    // Array of pins used as input for columnss of keypad
 
-// Pins used for the LCD
-//const int lcdPin[6]={51,53,9,11,12,13};
-
 /* ============================= TECLADO DE MEMBRANA ============================= */
 
 unsigned long kdelay=0;         // Variable used in non-blocking delay 
@@ -37,8 +37,22 @@ char receiver_phoneNumber[13];        // Variable used to store the number of th
 char unk_receiver_phoneNumber[20];
 int8_t answer;
 int value = -1;
+int limit = 2;
+int limit2 = 2;
 
 /* ============================= PANTALLA LCD ============================= */
 
-// Initialize the library by providing the nuber of pins to it
-//LiquidCrystal lcd(lcdPin[0], lcdPin[1], lcdPin[2], lcdPin[3], lcdPin[4], lcdPin[5]);
+//I2C pins declaration
+LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
+
+//Flecha izquierda
+byte flechaD[8] = {
+  0b00000,
+  0b00100,
+  0b00110,
+  0b11111,
+  0b00110,
+  0b00100,
+  0b00000,
+  0b00000
+};
