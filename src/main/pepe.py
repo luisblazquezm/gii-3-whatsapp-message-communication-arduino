@@ -68,7 +68,6 @@ def whattsapp_recv(phoneNumb):
             for line in search:
                 line = line.rstrip()  # remove '\n' at end of line
                 if phoneNumb in line:
-                    print("Este amor no se toca")
                     start = 0;
                     end = line.find('+', start)
                     contact = line[start:end]
@@ -144,7 +143,7 @@ while (1):
                         phone_number = ser.readline() # Reads the phone number first
                         phone_number = phone_number[:-3]
                         msg_to_print = "El num es " + phone_number # -- DEBUG -- 
-                        print (msg_to_print) # -- DEBUG -- 
+                        #print (msg_to_print) # -- DEBUG -- 
                         print (phone_number_contact) # -- DEBUG -- 
 
                         whattsapp_recv(phone_number)
@@ -184,13 +183,17 @@ while (1):
         print (phone_number)
         phone_number = phone_number[:-3]
         msg_to_print = "El num es " + phone_number # -- DEBUG -- 
-        print (msg_to_print) # -- DEBUG -- 
+        #print (msg_to_print) # -- DEBUG -- 
         print (phone_number_contact) # -- DEBUG -- 
         
+        #print("Bueno bueno bueno")
+
         whattsapp_recv(phone_number)
 
         while (1): # Reads the message of the receiver
             chr_rcv = ser.readline()
+            #print("Que es esto")
+            #print(chr_rcv)
             chr_rcv = chr_rcv[:-2]
             if chr_rcv == "recv_off":
                 break
@@ -198,7 +201,6 @@ while (1):
                 print(chr_rcv)
             
             msg_rcv = msg_rcv + chr_rcv
-            #print("Escribiendo mensaje en fichero...")
         
         msg_rcv = msg_rcv + "\n"
         if phone_number == phone_number_contact:
@@ -212,9 +214,10 @@ while (1):
         contacts_file = open(contacts_file_path, "r");
 
         for x in contacts_file:
-            #print(x)
             ser.write(x)
             time.sleep(5)
+
+        contacts_file.close()
 
     elif serial_content == "contacts_msg":
 
@@ -233,7 +236,7 @@ while (1):
                     start = line.find('+')
                     end = line.find('*', start)
                     phone_number_contact = line[start:end]
-                    print (phone_number_contact)
+                    #print (phone_number_contact)
                     ser.write(line[start:end])
                     flag_found_2 = 1
                     break
@@ -287,7 +290,7 @@ while (1):
             for line in search:
                 line = line.rstrip()  # remove '\n' at end of line
                 if name_contact in line:
-                    print(line)
+                    #print(line)
                     start = line.find('+')
                     end = line.find('*', start)
                     phone_contact = line[start:end]
@@ -298,17 +301,24 @@ while (1):
 
         # Replace the target string
         if new_name_contact != '':
+            print ("Reemplazando contacto")
             filedata = filedata.replace(name_contact, new_name_contact)
 
         if new_phone_contact != '':
+            print ("Reemplazando numero")
+            print(phone_contact)
+            print(new_phone_contact)
             filedata = filedata.replace(phone_contact, new_phone_contact)
 
         # Write the file out again
-        with open(contacts_file_path, 'w') as file:
-          file.write(filedata)
+        with open(contacts_file_path, 'w') as file1:
+            print("Escribir")
+            print(filedata)
+            file1.write(filedata)
 
         search.close()
         file.close()
+        file1.close()
 
     elif serial_content == "terminate":
         print "Exiting"

@@ -1,3 +1,7 @@
+
+/* Comunicación bidireccional de conversación de whatsapp. Mientras se escribe a un número o contacto
+ * se pueden recibir mensajes
+*/
 void start_communication() 
 {
   get_contact_number();
@@ -18,24 +22,22 @@ void start_communication()
   whatsapp_serial_enviar_mensaje();
 }
 
-
+/* Tratamiento del envio de mensajes */
 int sendMessage()
 { 
     String msg_send = "";                 // Message to send through the serial port to the mobile number
-    Serial.println("messages_1");
+    Serial.println("messages_1");         // Mensaje enviado al codigo en Python
     print_msg_LCD("Introduce_message", "");/* LCD */
     delay(3000);
     
     do { // If data is available to read
         while(!Serial.available()) { 
-          //Serial.println("Aqui !serial");
           if (sms.available()) 
             break;
         }
         
         while (Serial.available())
         {
-          //Serial.println("Aqui serial");
           delay(300);  //delay to allow buffer to fill 
           if (Serial.available() >0)
           {
@@ -45,15 +47,11 @@ int sendMessage()
         }
         
         if (sms.available()){
-            //Serial.println("***1 message received***");
-            print_msg_LCD("Received", "");/* LCD */
             recvMessage();
-          }
-         //Serial.println("Aqui fuera");
-        // msg_send = Serial.readString();     // Read the message
-        //Serial.println("Esperando...");
+         }
     } while (msg_send.equals(""));
 
+    // IMPORTANTE: si en una conversación recibimos 'exit' nos salimos de ella
     if (msg_send.equals("exit")) {
       digitalWrite(pinLED_2, HIGH);
       return 0;
@@ -64,8 +62,7 @@ int sendMessage()
     digitalWrite(pinLED_1, HIGH);
 
     delay(5000);
-    print_msg_LCD("msg_send", msg_send);/* LCD */
-    //Serial.println("\t\t\t\t" + msg_send);
+    print_msg_LCD("msg_send", msg_send); /* LCD */
 
     // Turns on second green LED
     digitalWrite(pinLED_2, HIGH);
@@ -73,7 +70,6 @@ int sendMessage()
     int num = sms.beginSMS(receiver_phoneNumber);
     num = sms.print(msg_send);
     sms.endSMS();
-    //Serial.println("Mensaje enviado!");
     delay(2000);
 
     digitalWrite(pinLED_1, LOW);
@@ -84,7 +80,7 @@ int sendMessage()
 
 void recvMessage()
 {
-  char c;
+  char c, d;
   int i = 0;
   String msg_recv = "";                 // Message to receive from the serial port from another phone number
 
@@ -94,26 +90,25 @@ void recvMessage()
   // Messages starting with # should be discarded
   if(sms.peek()=='#')
   {
-    //Serial.println("Discarded SMS");
     sms.flush();
   }
 
   // Read message bytes and print them
-  Serial.println("recv_on");
+  Serial.println("recv_on"); // Mensaje enviado al codigo en Python
   
   if(strcmp(unk_receiver_phoneNumber, receiver_phoneNumber) == 0) {
     Serial.println(String(receiver_phoneNumber) + ":");
   } else {
     Serial.println(String(unk_receiver_phoneNumber) + ":");
+    print_msg_LCD("Received", ""); /* LCD */
   }
   
   while(c=sms.read()) {
     msg_recv = msg_recv + c;
-    //Serial.println(c);
   }
   
   Serial.println(msg_recv);
-  Serial.println("recv_off");
+  Serial.println("recv_off"); // Mensaje enviado al codigo en Python
 
   play_tone("recv");
 
@@ -131,14 +126,12 @@ void recvMessage()
   
   // delete message from modem memory
   sms.flush();
-  //Serial.println("MESSAGE DELETED");
   
 }
 
 int readSerial(char result[]) 
 {
   int i = 0;
-  //Serial.println("Introduzca el numero receptor");
   
   while (1) {
     while (Serial.available() > 0) {
@@ -159,7 +152,7 @@ int readSerial(char result[])
 void introduce_number_serial()
 {
   Serial.println("Introduzca el numero de telefono:");
-  Serial.println("phone_number");
+  Serial.println("phone_number"); // Mensaje enviado al codigo en Python
   int i = 0;
   while (1) {
     while (!Serial.available()) {}
@@ -185,7 +178,7 @@ void introduce_number_serial()
 void get_contact_number()
 {
   Serial.println("Introduzca el contacto:");
-  Serial.println("contacts_msg");
+  Serial.println("contacts_msg"); // Mensaje enviado al codigo en Python
   int i = 0;
   while (1) {
     while (!Serial.available()) {}
@@ -197,7 +190,6 @@ void get_contact_number()
         char c = Serial.read();  //gets one byte from serial buffer
         receiver_phoneNumber[i] = c; //makes the string readString
         i++;
-        //Serial.println(c);
       }
       if (i == 12) break;
     }
@@ -205,8 +197,5 @@ void get_contact_number()
   }
   
   receiver_phoneNumber[i] = '\0';
-  //lcd.print('>' + sender_phoneNumber); // From 12 -> 15 /* LCD */
   print_msg_LCD("Telephone numbers", "");/* LCD */
-  //Serial.println("El numero del contacto es " + String(receiver_phoneNumber));
-
 }

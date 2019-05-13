@@ -1,65 +1,7 @@
 
-/*
-void moveRight(){
-  if (cursorPos == 3){
-    lcd.setCursor(6, 1);
-    cursorPos = 0;
-  } else {
-    int a = cursorPos + 7;
-    lcd.setCursor(a, 1);
-    cursorPos = cursorPos + 1;
-  }
-}
-
-void moveLeft(){
-  if (cursorPos == 0){
-    lcd.setCursor(9, 1);
-    cursorPos = 3;
-  } else {
-    int b = cursorPos + 5;
-    lcd.setCursor(b, 1);
-    cursorPos = cursorPos - 1;
-  }
-}
-
-void increase(int cursorPos){
-  if (dig[cursorPos] == 9){
-    dig[cursorPos] = 0;
-  } else {
-    dig[cursorPos] = dig[cursorPos] + 1;
-  }
-  int c = cursorPos + 6;
-  lcd.setCursor(c, 1);
-  lcd.print(dig[cursorPos]);
-  lcd.setCursor(c, 1);
-}
-
-void decrease(int cursorPos){
-  if (dig[cursorPos] == 0){
-    dig[cursorPos] = 9;
-  } else {
-    dig[cursorPos] = dig[cursorPos] - 1;
-  }
-  int c = cursorPos + 6;
-  lcd.setCursor(c, 1);
-  lcd.print(dig[cursorPos]);
-  lcd.setCursor(c, 1);
-}
-//change this part for your own passcode
+/* Imprime un mensaje en el LCD atendiendo al menú desde el que se imprima y el mensaje que se quiera
+ * transmitir
 */
-
-void test_LCD() /* DEBUG */
-{
-  
-  // set cursor position to start of first line on the LCD
-  lcd.setCursor(0,0);
-  //text to print
-  lcd.print("   16x2 LCD");
-  // set cusor position to start of next line
-  lcd.setCursor(0,1);
-  lcd.print("   DISPLAY");
-}
-
 void print_msg_LCD(String mode, String msg)
 {
   if (mode.equals("msg_send")) { // Sender
@@ -86,11 +28,10 @@ void print_msg_LCD(String mode, String msg)
     lcd.setCursor(0,1);
     lcd.print(msg);
 
-    delay(4000);
+    delay(1000);
     lcd.clear();
 
   } else if (mode.equals("keypad")) { // Keypad
-    Serial.println("Keypad writes LCD");
     lcd.setCursor(0,0);
     lcd.print("Introducir clave"); 
 
@@ -105,6 +46,7 @@ void print_msg_LCD(String mode, String msg)
     lcd.print(receiver_phoneNumber); 
 
   } else if (mode.equals("Introduce_message")) { // Introduce message
+    lcd.clear();
     Serial.println("Message introducing writes LCD");
     lcd.setCursor(0,0);
     lcd.print("Introduzca el");
@@ -113,7 +55,7 @@ void print_msg_LCD(String mode, String msg)
     lcd.print("mensaje a enviar");
 
   } else if (mode.equals("Received")) {
-    Serial.println("Message received writes LCD");
+    //Serial.println("Message received writes LCD");
     
     lcd.setCursor(0,0);
     lcd.clear();
@@ -124,69 +66,46 @@ void print_msg_LCD(String mode, String msg)
     lcd.setCursor(0,0);
     lcd.print("From:");
     lcd.setCursor(0,1);
-    if(strcmp(unk_receiver_phoneNumber, receiver_phoneNumber) == 0) {
-      lcd.print(receiver_phoneNumber);
-    } else {
-      lcd.print(unk_receiver_phoneNumber);
-    }
+    lcd.print(unk_receiver_phoneNumber);
     
-    delay(4000);
+    delay(1000);
   }
  }
 
+/* Devuelve una letra W, A, S, D u O dependiendo de la dirección de movimiento leida del joystick 
+ * OJO --> Las lecturas han de ser calibradas ya que para cada joystick son diferentes los valores leidos
+ * correspondientes a cada dirección (arriba, abajo, izquierda y derecha)
+*/
  char getJoystickDirection()
  {
-  //lcd.setCursor(0, 0);
   bool pulsador = false;
-  int sensorX = analogRead(A0); //get readings for x,y-axis movement
-  int sensorY = analogRead(A1);
-  pulsador = digitalRead(kPin);
-  Serial.println("Pulsador:" + String(pulsador));
-    /*
-  float angleX = sensorX * (180.0 / 1023.0); //convert value to angle
-  float angleY = sensorY * (180.0 / 1023.0);
-  if (angleX > 100) {
-  moveRight();
-  delay(500);
-  } else if ( angleX < 70) {
-  moveLeft();
-  delay(500);
-  } else {
-  if (angleY > 105){
-  decrease(cursorPos);
-  delay(250);
-  } else if(angleY < 75) {
-  increase(cursorPos);
-  delay(250); 
-  }
-  */
-  //Serial.println("SensorX: " + String(sensorX));
-  //Serial.println("SensorY: " + String(sensorY));
+  int sensorX = analogRead(A0); // Lee del pin A0, conectado al eje de las X del joystick
+  int sensorY = analogRead(A1); // Lee del pin A0, conectado al eje de las Y del joystick
+  pulsador = digitalRead(kPin); // Lee del pin digital 9, conectado al pulsador del joystick
 
-  if(sensorX == 2 && sensorY == 0){
-    //Serial.println("Arriba");
+  if(sensorX == 2 && sensorY == 0) { // Arriba
     return 'W';
-  } else if(sensorX >= 5 && sensorX <= 7 && sensorY >= 500) {
-    //Serial.println("Abajo");
+  } else if(sensorX >= 5 && sensorX <= 7 && sensorY >= 350) { // Abajo
     return 'S';
-  } else if(sensorX == 0 && sensorY == 2) {
-    //Serial.println("Izquierda");
+  } else if(sensorX == 0 && sensorY == 2) { // Izquierda
     return 'A';
-  } else if (sensorX >= 300 && sensorY == 5){
-    //Serial.println("Derecha");
+  } else if (sensorX >= 300 && sensorY == 5){ // Derecha
     return 'D';
   } 
 
-  if(!pulsador) {
-    //Serial.println("Centro");
+  if(!pulsador) { // Centro del joystick presionado
     pulsador = false;
     return 'O';
   } 
 
-  return 'T';
+  return 'T'; // En caso de que no se pulse ninguna tecla, para mantener la lógica del código
 
 }
 
+
+/* Función que imprime un menú distinto en el LCD atendiendo a los textos que se incluyan en el 
+ * array 'menus' y a la posición actual de la flecha en el LCD
+*/
 void getMenu(int pos_actual, String menus[])
 {
    if (pos_actual <= 0)
@@ -239,6 +158,55 @@ void getMenu(int pos_actual, String menus[])
     lcd.write (byte (5));
     lcd.setCursor(1, 1);
     lcd.print(menus[3]);
+    limit2 = 5;
+   } else if (pos_actual == 5) {
+    // Sin flecha
+    lcd.setCursor(0, 0);
+    lcd.print(menus[3]);
+
+    // Con flecha
+    lcd.setCursor(0, 1);
+    lcd.write (byte (5));
+    lcd.setCursor(1, 1);
+    lcd.print(menus[4]);
    }
 
+}
+
+/* Función que mueve la linea del LCD si el texto es demasiado grande
+ * y no se puede leer
+*/
+void move_line_lcd(int pos_actual, String menus[])
+{
+  int string_length = menus[pos_actual].length();
+  int i = 0;
+  int stringStart, stringStop = 0;
+  int scrollCursor = 1;
+  
+  while(i < string_length) {
+      if (pos_actual%2 == 0)
+        lcd.setCursor(0, 0);
+        lcd.print(menus[pos_actual-1]);
+      
+      lcd.setCursor(scrollCursor, 1);
+      lcd.print(menus[pos_actual].substring(stringStart,stringStop));
+      
+      delay(400);
+      
+      lcd.clear();
+      
+      if(stringStart == 0 && scrollCursor > 0){
+        scrollCursor--;
+        stringStop++;
+      } else if (stringStart == stringStop){
+        stringStart = stringStop = 0;
+        scrollCursor = 16;
+      } else if (stringStop == menus[pos_actual].length() && scrollCursor == 0) {
+        stringStart++;
+      } else {
+        stringStart++;
+        stringStop++;
+      }
+      
+    }
 }

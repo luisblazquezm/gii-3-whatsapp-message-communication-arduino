@@ -6,22 +6,26 @@ void setup() {
   boolean notConnected = true;     // GSM Connection state
   char pin[] = "5056";             // PIN number of the SIM Card of the GSM Shield we are using
   
-  // Initialize serial communications and wait for port to open
+  // Inicializar el puerto serie con los baudios requeridos
   Serial.begin(9600);
-  lcd.begin(16,2);//Defining 16 columns and 2 rows of lcd display
-  lcd.backlight();//To Power ON the back light
-  lcd.createChar(5, flechaD);
+
+  // Definición de las dimensiones del LCD e inicialización de las mismas
+  lcd.begin(16,2);                 // 16 columnas y 2 filas
+  lcd.backlight();                 // Encender la luz de fondo
+  lcd.createChar(5, flechaD);      // Crear el simbolo de la flecha -> a la derecha sobre el byte 5
   
   while (!Serial) {
-    ; // Wait for serial port to connect. Needed for native USB port only
+    ; // Esperar a que se conecte el puerto serie
   }
 
   pinMode(pinBuzzer, OUTPUT);
-  pinMode(A0, INPUT);
-  pinMode(A1, INPUT);
-  pinMode(kPin, INPUT_PULLUP);
 
-  // Initalice the pins for the KeyPad 
+  // Inicializacion de pines del joystick
+  pinMode(A0, INPUT);          // Eje X
+  pinMode(A1, INPUT);          // Eje Y
+  pinMode(kPin, INPUT_PULLUP); // Boton central - Pulsador
+
+  // Inicialización de los pines del KeyPad 
   for(byte i=0;i<rows;i++) {
     pinMode(Output[i],OUTPUT);
   }
@@ -30,19 +34,20 @@ void setup() {
     pinMode(Input[s],INPUT_PULLUP);
   }
 
-  /* Unlock the phone using the Keypad */
+  // Pantalla que logra simular el desbloqueo de un móvil como si de ello se tratase
+  // nuestra aplicacion
   unlockPhone();
 
   Serial.println("  =======================================================================================");
   Serial.println("                              Accessing Whatsapp application                             ");
   Serial.println("  =======================================================================================");
   
-  // Start GSM shield
-  // If your SIM has PIN, pass it as a parameter of begin() in quotes
+  // Comienzo y conexión del GSM shield
+  // Le pasamos el pin de la tarjeta SIM a través del parámetro begin para que logre acceder a los servicios GSM y GPRS
   while(notConnected)
   {
     if(gsmAccess.begin("5056", true)==GSM_READY) {
-      Serial.println("Connected");
+      lcd.print("Connected");
       notConnected = false;
     } else {
       Serial.println("Not connected");
@@ -50,21 +55,24 @@ void setup() {
     }
   }
 
+  delay(2000);
   lcd.clear();
   lcd.setCursor(0,0); /* LCD */
 
+  // Limpiamos la pantalla para dejar lugar al menú principal
   whatsapp_serial_limpiar_pantalla_menus();
 
+  // Tono de indicación acceso a la apliación
   play_tone("startup");
 
-  // Pins for LEDs
+  // Iniciación de los pines para los LEDs verdes y azul de notificaciones
   pinMode(A0, OUTPUT); // LED verde (cuando se envia el mensaje)
   pinMode(A1, OUTPUT); // LED verde (cuando aparece nuestro mensaje en la pantalla) . Simboliza que el el recptero lo ha recibido 
   pinMode(A2, OUTPUT); // LED azul (parpadeante). Cuando llega el whatsapp
 
 }
 
-// Main code of the program. Bidirecctional communication
+// Codigo principal del programa
 void loop() {    
 
   whatsapp_serial_menu();

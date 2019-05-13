@@ -48,3 +48,31 @@ Hola
 
 Que
 Hola
+				Hola
+
++34650310745
+Message received writes LCDHola
+Message received writes LCDCava
+Holas
+				exit
+
+				exit
+
+				exit
+
+				
+
+				exit
+
+				
+
+				exit
+
+				
+
+Que
+Hola
+Que
+No
+				exit
+
