@@ -1,26 +1,29 @@
 #include <GSM.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-   
-#define kPin      9 
 
 // Other variables 
-const byte rows=4;               // Number of rows of keypad
-const byte columns=4;            // Number of columnss of keypad
+const byte rows=4;               // Numero de filas del keypad
+const byte columns=4;            // Number de columnas del keypad
 
 /* ============================= PINES DE CONEXION ============================= */
 
-// Pins used for the LEDs. Arduino MEGA GSM shield has pins 2,3,7 and 10 reserved.
-const int pinLED_1 = 4;                     // LED green when the message is sent
-const int pinLED_2 = 5;                     // LED green when the message is received by the receiver
-const int pinLED_3 = 6;                     // LED blue when the message has been read by the receiver
+// Pines usados para los LEDs. Arduino MEGA GSM shield tiene los pines 2,3,7 y 10 reservados.
+const int pinLED_1 = 4;                     // LED green cuando se envía el mensaje
+const int pinLED_2 = 5;                     // LED green cuando el mensaje es recibido por el receptor
+const int pinLED_3 = 6;                     // LED blue cuando el mensaje es leido por el receptor
 
-// Pin used for the Buzzer
+// Pines para el joystick
+const int pinEjeX = A0;
+const int pinEjeY = A1;
+const int pinPulsador = 9;
+
+// Pin usados para el Buzzer
 const int pinBuzzer = 8;
 
-// Pins used for the Keypad
-const byte Output[rows]={25,27,29,31};      // Array of pins used as output for rows of keypad
-const byte Input[columns]={33,35,37,39};    // Array of pins used as input for columnss of keypad
+// Pines usados para el Keypad
+const byte Output[rows]={25,27,29,31};      // Array de pines usados para indicar las filas del keypad
+const byte Input[columns]={33,35,37,39};    // Array de pines usados para indicar las columnas del keypad
 
 /* ============================= TECLADO DE MEMBRANA ============================= */
 

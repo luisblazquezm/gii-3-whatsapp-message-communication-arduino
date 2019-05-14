@@ -14,19 +14,22 @@ import fileinput
 #######################################
 
 
-#The following line is for serial over GPIO
+# The following line is for serial over GPIO
 serial_port = '/dev/cu.usbmodem14201';
 baud_rate = 9600; #In arduino, Serial.begin(baud_rate)
 
+# Variables for I/O management
 contacts_file_path = "contacts.txt"
 chats_file = ""
 user_chats_file_path = ""
 unknown_chats_file_path = ""
 chat_new_file = ""
 
+# Connect to serial port
 ser = serial.Serial(serial_port, baud_rate)
 time.sleep(2) # wait for Arduino
 
+# Other flags and message contents . As well as phone_number contacts stored variables.
 serial_content = ""
 new_line = ""
 phone_number = ""
@@ -48,19 +51,20 @@ flag_found_2 = 0
 #                                     #
 #######################################
 
-
+# Function that creates another thread that is listening for new messages while principal one is 
+# waiting for input to send
 def kbdListener():
     global setTempCar1, finished
     setTempCar1 = raw_input("\t\t\t\t::")
     ser.flush()
     serTemp1 = str(setTempCar1)
-    #print("Escribiendo envio en fichero...") # -- DEBUG -- 
     ser.write(serTemp1)
     new_line = "\t\t\t\t" + serTemp1 + "\n\n"
     chats_file.write(new_line)
-    #print "maybe updating...the kbdInput variable is: {}".format(new_line) # -- DEBUG -- 
     finished = True
 
+# Handles the management of the reception of new messages from people different from the
+# one we are talking to
 def whattsapp_recv(phoneNumb):
     global chat_new_file
     if phoneNumb != phone_number_contact:
@@ -89,7 +93,6 @@ def whattsapp_recv(phoneNumb):
         print(unknown_chats_file_path)
         chat_new_file = open(unknown_chats_file_path, "a+");
     else:
-        #print("Escribiendo numero en fichero...") # -- DEBUG -- 
         phoneNumb = phoneNumb + "\n"
         chats_file.write(phoneNumb)
 
@@ -106,7 +109,7 @@ while (1):
     serial_content = ser.readline() # read all characters in buffer
     serial_content = serial_content[:-2]
 
-    if serial_content == "phone_number": # Introduce the phone number of the receiver -- DEBUG --
+    if serial_content == "phone_number": # 1- Introduce the phone number of the receiver 
 
         setTempCar1 = raw_input("Telefono: ")
         ser.flush()
@@ -116,7 +119,7 @@ while (1):
         setTempCar1 = ''
         time.sleep(5)
 
-    elif serial_content == "messages_1":
+    elif serial_content == "messages_1": # 2- Message sender communication to another contact/nubmer
 
         with open(user_chats_file_path) as search:
             for line in search:
@@ -124,26 +127,19 @@ while (1):
                 print(line)
 
         while(1):
-            #print "kbdInput: {}".format(setTempCar1) # -- DEBUG -- 
-            #print "playingID: {}".format(playingID) # -- DEBUG -- 
             if playingID != setTempCar1:
-                #print "Received new keyboard Input. Setting playing ID to keyboard input value"
                 playingID = setTempCar1
             elif setTempCar1 == "exit":
                 # Kill thread
                 break
             else:
-                #print "No input from keyboard detected. Sleeping 5 seconds"
                 if termin:
-                    serial_content = ser.readline() # read all characters in buffer
+                    serial_content = ser.readline() # Read all characters in buffer
                     serial_content = serial_content[:-2]
-                    #print ("Ole mi pepe") # -- DEBUG -- 
                     if serial_content == "recv_on":
                         new_line = ""
                         phone_number = ser.readline() # Reads the phone number first
                         phone_number = phone_number[:-3]
-                        msg_to_print = "El num es " + phone_number # -- DEBUG -- 
-                        #print (msg_to_print) # -- DEBUG -- 
                         print (phone_number_contact) # -- DEBUG -- 
 
                         whattsapp_recv(phone_number)
@@ -152,12 +148,10 @@ while (1):
                             chr_rcv = ser.readline()
                             chr_rcv = chr_rcv[:-2]
                             if chr_rcv == "recv_off":
-                                #print("Me salgo")
-                                break
+                                break # Stops reading the message
                             if phone_number == phone_number_contact:
                                 print(chr_rcv)
                             msg_rcv = msg_rcv + chr_rcv
-                            #print("Escribiendo mensaje en fichero...")
                         
                         msg_rcv = msg_rcv + "\n"
 
@@ -168,7 +162,7 @@ while (1):
                             chat_new_file.write(msg_rcv);
                             chat_new_file.close()
 
-            if finished:
+            if finished: # Creates the new thread for listening to upcoming messages
                 finished = False
                 termin = True
                 listener = threading.Thread(target=kbdListener)
@@ -176,24 +170,19 @@ while (1):
 
             time.sleep(2)
 
-    elif serial_content == "recv_on":
+    elif serial_content == "recv_on": # 2- A new message has been received and has to be treated
 
         new_line = ""
         phone_number = ser.readline() # Reads the phone number first
         print (phone_number)
         phone_number = phone_number[:-3]
-        msg_to_print = "El num es " + phone_number # -- DEBUG -- 
-        #print (msg_to_print) # -- DEBUG -- 
-        print (phone_number_contact) # -- DEBUG -- 
+        msg_to_print = "El num es " + phone_number  
+        print (phone_number_contact)  
         
-        #print("Bueno bueno bueno")
-
         whattsapp_recv(phone_number)
 
         while (1): # Reads the message of the receiver
             chr_rcv = ser.readline()
-            #print("Que es esto")
-            #print(chr_rcv)
             chr_rcv = chr_rcv[:-2]
             if chr_rcv == "recv_off":
                 break
@@ -209,7 +198,7 @@ while (1):
             chat_new_file.write(msg_rcv);
             chat_new_file.close()
         
-    elif serial_content == "contacts_transfer":
+    elif serial_content == "contacts_transfer": # 4- Load the contacts and sends it to arduino 
 
         contacts_file = open(contacts_file_path, "r");
 
@@ -219,7 +208,7 @@ while (1):
 
         contacts_file.close()
 
-    elif serial_content == "contacts_msg":
+    elif serial_content == "contacts_msg": # 5- Send message to a contact
 
         contact_var = raw_input("Contacto: ")
         ser.flush()
@@ -228,15 +217,12 @@ while (1):
         with open(contacts_file_path) as search:
             for line in search:
                 line = line.rstrip()  # remove '\n' at end of line
-                #print(serTemp1)
-                #print(line)
                 if serTemp1 in line:
                     print("Contacto encontrado")
                     print(line)
                     start = line.find('+')
                     end = line.find('*', start)
                     phone_number_contact = line[start:end]
-                    #print (phone_number_contact)
                     ser.write(line[start:end])
                     flag_found_2 = 1
                     break
@@ -252,7 +238,7 @@ while (1):
         user_chats_file_path = "chats_" + contact_var + ".txt";
         chats_file = open(user_chats_file_path, "a+");
 
-    elif serial_content == "contacts_add":
+    elif serial_content == "contacts_add": # 6- Add a new contact to the list of contacts
 
         contacts_file = open(contacts_file_path, "a+");
 
@@ -264,7 +250,7 @@ while (1):
 
         contacts_file.close()
 
-    elif serial_content == "contacts_delete":
+    elif serial_content == "contacts_delete": # 7- Delete an existing contact from the list of contacts
 
         print("Introduzca el nombre del contacto a eliminar")
         name_contact = raw_input("Nombre: ")
@@ -279,9 +265,9 @@ while (1):
 
         f.close()
 
-    elif serial_content == "contacts_modify":
+    elif serial_content == "contacts_modify": # 8- Modify a contact from the list of contacts
 
-        print("Introduzca el nombre del contacto a eliminar")
+        print("Introduzca el nombre del contacto a modificar")
         name_contact = raw_input("Nombre: ")
         new_name_contact = raw_input("Nuevo nombre: ")
         new_phone_contact = raw_input("Nuevo telefono: ")
@@ -301,11 +287,9 @@ while (1):
 
         # Replace the target string
         if new_name_contact != '':
-            print ("Reemplazando contacto")
             filedata = filedata.replace(name_contact, new_name_contact)
 
         if new_phone_contact != '':
-            print ("Reemplazando numero")
             print(phone_contact)
             print(new_phone_contact)
             filedata = filedata.replace(phone_contact, new_phone_contact)
@@ -320,7 +304,7 @@ while (1):
         file.close()
         file1.close()
 
-    elif serial_content == "terminate":
+    elif serial_content == "terminate": # 9- Terminate the application and kill all threads
         print "Exiting"
         exit()
     else:
