@@ -124,7 +124,6 @@ byte keypad()
    return 50;
 }
 
-// Probar con 3 intentos<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 /* Function to make look like we are unlocking a phone to access to Whatsapp service */
 void unlockPhone() 
 {

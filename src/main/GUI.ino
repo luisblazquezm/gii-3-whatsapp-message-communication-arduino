@@ -45,24 +45,25 @@ void whatsapp_serial_menu()
  lcd.setCursor(0, 1); 
  lcd.print(menu1[1]);
 
+ // Bucle de acción del joystick
  while(!flag_enter){
     delay(100);
     mov = getJoystickDirection();
     
     switch(mov){
-      case 'W':
+      case 'W': // Se ha pulsado hacia arriba el joystick
         if (actual >= 1){
           if (actual > 1) actual--; // actual = 2,3
           getMenu(actual, menu1);
         } 
         break;
-      case 'S':
+      case 'S': // Se ha pulsado hacia abajo el joystick
         if (actual <= limit){
           if (actual < limit) actual++; // actual = 1,2
           getMenu(actual, menu1);
         }
         break;
-      case 'O':
+      case 'O': // Se ha presionado el centro del joystick
         flag_enter = 1;
         break;
       default:
@@ -149,14 +150,12 @@ void whatsapp_serial_enviar_mensaje()
     
     switch(mov){
       case 'W':
-        //Serial.println("Actual W: "+ String(actual));
         if (actual >= 1){
           if (actual > 1) actual--; // actual = 2,3
           getMenu(actual, menu2);
         } 
         break;
       case 'S':
-        //Serial.println("Actual S: "+ String(actual));
         if (actual <= 2){
           if (actual < 2) actual++; // actual = 1,2
           getMenu(actual, menu2);
@@ -234,17 +233,20 @@ void whatsapp_serial_contactos()
   Serial.println("##########################################################################################");
   Serial.println("#            NOMBRE        TELEFONO                                                      #");
   Serial.println("##########################################################################################");
+
+  /* Manda la orden al codigo Python a través de puerto serie para cargar los contactos */
+  Serial.println("contacts_transfer"); 
   
-  Serial.println("contacts_transfer");
+  // Anadimos un cierto delay tanto fuera como dentro del bucle
+  delay(3000); // Para el llenado del buffer
   
-  delay(3000);
   while(!Serial.available()) {}
         
   while (Serial.available()) {
     delay(300);  //delay to allow buffer to fill 
     if (Serial.available() >0)
     {
-      char c = Serial.read();  //gets one byte from serial buffer
+      char c = Serial.read();  // Lee un byte del puerto serie
       if (c == '\n') {
         Serial.println("#            " + contact + "                                                     #");
         list_contacts[i] = contact;
@@ -255,7 +257,6 @@ void whatsapp_serial_contactos()
       }
     }
   }
-  
   
   Serial.println("##########################################################################################");
  
@@ -298,24 +299,28 @@ void whatsapp_serial_contactos()
     
   switch(actual) {
     case 1:
+     /* Manda la orden al codigo Python a través de puerto serie para añadir un contacto */
       Serial.println("contacts_add");
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Creando contacto ..."); 
       break;
     case 2:
+    /* Manda la orden al codigo Python a través de puerto serie para eliminar un contacto */
       Serial.println("contacts_delete");
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Eliminando contacto ..."); 
       break;
     case 3:
+     /* Manda la orden al codigo Python a través de puerto serie para modificar un contacto */
       Serial.println("contacts_modify");
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Modificando contacto ..."); 
       break;
     case 4:
+      /* Manda la orden al codigo Python a través de puerto serie para mostrar los contactos */
       whatsapp_mostrar_contactos(list_contacts, i);
       break;
     case 5:
@@ -328,7 +333,9 @@ void whatsapp_serial_contactos()
   lcd.clear();
   lcd.setCursor(0, 1);
   lcd.print("Pulse arriba para volver");
-  
+
+  // Si quiere salir de alguno de las opciones de la lista de contactos tiene que pulsar arriba
+  // con el joystick
   mov = 'T';
   while(mov != 'W'){
     delay(100);

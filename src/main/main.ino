@@ -36,7 +36,7 @@ void setup() {
 
   // Pantalla que logra simular el desbloqueo de un móvil como si de ello se tratase
   // nuestra aplicacion
-  //unlockPhone();
+  unlockPhone();
 
   Serial.println("  =======================================================================================");
   Serial.println("                              Accessing Whatsapp application                             ");
@@ -44,7 +44,7 @@ void setup() {
   
   // Comienzo y conexión del GSM shield
   // Le pasamos el pin de la tarjeta SIM a través del parámetro begin para que logre acceder a los servicios GSM y GPRS
-  /*
+  
   while(notConnected)
   {
     if(gsmAccess.begin("5056", true)==GSM_READY) {
@@ -55,7 +55,7 @@ void setup() {
       delay(1000);
     }
   }
-  */
+  
   delay(2000);
   lcd.clear();
   lcd.setCursor(0,0); /* LCD */
@@ -76,6 +76,7 @@ void setup() {
 // Codigo principal del programa
 void loop() {    
 
+  // Aqui comienza el menú principal
   whatsapp_serial_menu();
  
 }

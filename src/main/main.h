@@ -37,10 +37,11 @@ GSM_SMS sms;
 
 char sender_phoneNumber[20];          // Variable used to store the number of the SENDER
 char receiver_phoneNumber[13];        // Variable used to store the number of the RECEIVER
-char unk_receiver_phoneNumber[20];
+char unk_receiver_phoneNumber[20];    // Variable used to store the number of a person who sends a message 
+                                      // and we are in the middle of a conversation with another person
 int8_t answer;
-int value = -1;
-int limit = 2;
+int value = -1;                
+int limit = 2;                        // Limits of the values of the joystick
 int limit2 = 2;
 
 /* ============================= PANTALLA LCD ============================= */
@@ -48,7 +49,7 @@ int limit2 = 2;
 //I2C pins declaration
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
-//Flecha izquierda
+//Bytes para crear la figura 'Flecha izquierda' en el LCD
 byte flechaD[8] = {
   0b00000,
   0b00100,

@@ -1,3 +1,7 @@
+
+/* Toca el array de frecuencias que le pasamos como argumento conteniendo el conjunto de frecuencias
+ * de la canción o sonido a reproducir
+*/
 void playNote(int noteInt, double noteFreqArr[], int noteDurationArr[], long breath = 20) 
 {
   noteDurationArr[noteInt] = noteDurationArr[noteInt] - breath;
@@ -7,6 +11,10 @@ void playNote(int noteInt, double noteFreqArr[], int noteDurationArr[], long bre
   }
 }
 
+
+/* Indicamos en el codigo de arduino el tipo de sonido que queremos que se reproduzca en el buffer
+ *  dependiendo del menú en el que estemos y la situacion
+*/
 void play_tone(String mode)
 {
   int i;
@@ -36,6 +44,7 @@ void play_tone(String mode)
   int noteDurationArrSendMario[] = { /* Mario Victory */
      100, 100, 100, 300, 100, 100, 100, 400
   };
+  
   int countTonesSendStartup = 7;
   int countTonesSendShutDown = 4;
   int countTonesSendMario = 8;
@@ -43,14 +52,18 @@ void play_tone(String mode)
 
   Serial.println("Playing tone in mode " + mode);
 
-  if (mode.equals("startup")) {
-    Serial.println("Sonido de enviar");
+  if (mode.equals("startup")) { // Se reproduce cuando el usuario entra en la aplicación , el primer menú
+    
     for (i = 0 ; i < countTonesSendStartup ; i++)
       playNote(i, noteFreqArrSendStartup, noteDurationArrSendStartup);
-  } else if (mode.equals("recv")) {
+      
+  } else if (mode.equals("recv")) { // Se reproduce cuando el usuario recibe un mensaje
+    
     for (i = 0 ; i < countTonesSendMario ; i++)
       playNote(i, noteFreqArrSendMario, noteDurationArrSendMario);
-  } else if (mode.equals("shutdown")) {
+      
+  } else if (mode.equals("shutdown")) { // Se reproduce cuando el usuario sale de la aplicación
+    
     for (i = 0 ; i < countTonesSendShutDown ; i++)
       playNote(i, noteFreqArrSendShutDown, noteDurationArrSendShutdown);
   }
@@ -58,6 +71,9 @@ void play_tone(String mode)
   
 }
 
+/* Una vez procesado el array de frecuencias e indicadas las duraciones y pausas, se enlaza a los pines del buzzer
+ *  y se reproduce el sonido
+*/
 void buzz(int targetPin, long frequency, long length) 
 {
   long delayValue = 1000000/frequency/2; // calculate the delay value between transitions
