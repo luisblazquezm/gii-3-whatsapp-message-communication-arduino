@@ -9,7 +9,7 @@ Trabajo Final de la asignatura Periféricos para la realización del sistema de 
 ```
 
 ## Funcionamiento del código
-Para la realización de este proyecto hemos utilizado una placa Arduino Mega cuyo funcionamiento esta basado en la utilización de los siguientes lenguajes de programación realizado el programa utilizando los lenguajes de programación: **Arduino**, para modificar el comportamiento de las diferentes piezas y herramientas hardware que hemos conectado a la placa. Y , por otro lado, el lenguaje de programación **Python**, para el tratamiento de la comunicación de mensajes y persistencia y almacenamiento de datos en los chats que ofrece el servicio Whatsap.
+Para la realización de este proyecto hemos utilizado una placa Arduino Mega cuyo funcionamiento esta basado en la utilización de los siguientes lenguajes de programación realizado el programa utilizando los lenguajes de programación: **Arduino**, para modificar el comportamiento de las diferentes piezas y herramientas hardware que hemos conectado a la placa. Y , por otro lado, el lenguaje de programación **Python**, para el tratamiento de la comunicación de mensajes y persistencia y almacenamiento de datos en los chats que ofrece el servicio WhatsApp.
 
 ## Objetivo
 El objetivo a alcanzar se trataba de conseguir enviar un mensaje a un número de teléfono y posteriormente no solo esta funcionalidad, si no también poder recibir mensajes de otros números, es decir, se trataba de una comunicación unidireccional puesto que los equipos que intervienen en la comunicación no pueden mandar mensajes a la vez, esto lo solucionamos posteriormente convirtiendo la comunicación en bidireccional de tal forma que se puede tener una conversación fluida normal al estilo WhatsApp.
